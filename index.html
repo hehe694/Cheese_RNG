@@ -31,12 +31,12 @@
     #c-rng-ui {
       position: relative;
       width: 100%;
-      max-width: 650px; /* Sized up from 420px */
+      max-width: 650px;
       background: rgba(18, 18, 24, 0.96);
       backdrop-filter: blur(14px);
       border: 3px solid #ffaa00;
       border-radius: 32px;
-      padding: 36px;
+      padding: 32px;
       box-shadow: 0 0 45px rgba(255, 170, 0, 0.4), 0 35px 70px rgba(0, 0, 0, 0.9);
       text-align: center;
       overflow: hidden;
@@ -77,16 +77,19 @@
 
   <div id="c-rng-ui">
     <canvas id="c-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
-    
-    <!-- Stat Badges -->
-    <div style="position:absolute;top:18px;left:20px;display:flex;gap:8px;z-index:10;font-size:13px;font-weight:800;">
-      <span style="background:rgba(255,149,0,0.2);color:#ff9500;padding:6px 12px;border-radius:12px;border:1px solid rgba(255,149,0,0.4);">🍀 <span id="c-st-l">+0%</span></span>
-      <span style="background:rgba(90,200,250,0.2);color:#5ac8fa;padding:6px 12px;border-radius:12px;border:1px solid rgba(90,200,250,0.4);">⚡ <span id="c-st-s">-0%</span></span>
-    </div>
 
     <div style="position:relative;z-index:2;">
-      <div style="font-size:18px;font-weight:900;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:8px;">🧀 CHEESE RNG 🎲</div>
-      <div style="font-size:18px;font-weight:900;color:#ffd700;margin-bottom:18px;background:rgba(255,215,0,0.12);padding:8px 20px;border-radius:18px;display:inline-block;border:1px solid rgba(255,215,0,0.35);">
+      <!-- Title Header -->
+      <div style="font-size:24px;font-weight:900;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:12px;">🧀 CHEESE RNG 🎲</div>
+
+      <!-- Stat Badges Row -->
+      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:16px;font-size:13px;font-weight:800;">
+        <span style="background:rgba(255,149,0,0.2);color:#ff9500;padding:6px 14px;border-radius:12px;border:1px solid rgba(255,149,0,0.4);">🍀 Luck: <span id="c-st-l">+0%</span></span>
+        <span style="background:rgba(90,200,250,0.2);color:#5ac8fa;padding:6px 14px;border-radius:12px;border:1px solid rgba(90,200,250,0.4);">⚡ Speed: <span id="c-st-s">-0%</span></span>
+      </div>
+
+      <!-- Coins Display -->
+      <div style="font-size:18px;font-weight:900;color:#ffd700;margin-bottom:20px;background:rgba(255,215,0,0.12);padding:8px 22px;border-radius:18px;display:inline-block;border:1px solid rgba(255,215,0,0.35);">
         🧀 <span id="c-coins-val">0</span> Coins
       </div>
 
