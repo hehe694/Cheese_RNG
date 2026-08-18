@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>🧀 CHEESE RNG 🎲</title>
   <style>
-    /* Mobile Touch & Scroll Fixes */
+    /* Mobile Touch & Reset */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -23,21 +23,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 15px;
+      padding: 20px;
       overflow-x: hidden;
     }
 
-    /* Main Container Card */
+    /* ENLARGED Main Container Card */
     #c-rng-ui {
       position: relative;
       width: 100%;
-      max-width: 420px;
+      max-width: 650px; /* Sized up from 420px */
       background: rgba(18, 18, 24, 0.96);
       backdrop-filter: blur(14px);
-      border: 2px solid #ffaa00;
-      border-radius: 26px;
-      padding: 26px;
-      box-shadow: 0 0 35px rgba(255, 170, 0, 0.35), 0 30px 60px rgba(0, 0, 0, 0.85);
+      border: 3px solid #ffaa00;
+      border-radius: 32px;
+      padding: 36px;
+      box-shadow: 0 0 45px rgba(255, 170, 0, 0.4), 0 35px 70px rgba(0, 0, 0, 0.9);
       text-align: center;
       overflow: hidden;
     }
@@ -49,11 +49,11 @@
     }
     @keyframes cPulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
+      50% { transform: scale(1.02); }
     }
     @keyframes cLand {
-      0% { transform: scale(1.25); filter: brightness(1.8); }
-      60% { transform: scale(0.95); }
+      0% { transform: scale(1.2); filter: brightness(1.8); }
+      60% { transform: scale(0.96); }
       100% { transform: scale(1); filter: brightness(1); }
     }
     @keyframes cFlash {
@@ -61,11 +61,11 @@
       100% { background: transparent; }
     }
     @keyframes rainbowGlow {
-      0% { box-shadow: 0 0 25px #ff0000; }
-      25% { box-shadow: 0 0 25px #ffff00; }
-      50% { box-shadow: 0 0 25px #00ff00; }
-      75% { box-shadow: 0 0 25px #0088ff; }
-      100% { shadow: 0 0 25px #ff00ff; }
+      0% { box-shadow: 0 0 35px #ff0000; }
+      25% { box-shadow: 0 0 35px #ffff00; }
+      50% { box-shadow: 0 0 35px #00ff00; }
+      75% { box-shadow: 0 0 35px #0088ff; }
+      100% { box-shadow: 0 0 35px #ff00ff; }
     }
 
     .c-rolling-card { animation: cPulse 0.4s infinite ease-in-out !important; }
@@ -78,61 +78,62 @@
   <div id="c-rng-ui">
     <canvas id="c-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
     
-    <!-- Stats Badge -->
-    <div style="position:absolute;top:14px;left:14px;display:flex;gap:6px;z-index:10;font-size:11px;font-weight:800;">
-      <span style="background:rgba(255,149,0,0.2);color:#ff9500;padding:4px 8px;border-radius:10px;border:1px solid rgba(255,149,0,0.4);">🍀 <span id="c-st-l">+0%</span></span>
-      <span style="background:rgba(90,200,250,0.2);color:#5ac8fa;padding:4px 8px;border-radius:10px;border:1px solid rgba(90,200,250,0.4);">⚡ <span id="c-st-s">-0%</span></span>
+    <!-- Stat Badges -->
+    <div style="position:absolute;top:18px;left:20px;display:flex;gap:8px;z-index:10;font-size:13px;font-weight:800;">
+      <span style="background:rgba(255,149,0,0.2);color:#ff9500;padding:6px 12px;border-radius:12px;border:1px solid rgba(255,149,0,0.4);">🍀 <span id="c-st-l">+0%</span></span>
+      <span style="background:rgba(90,200,250,0.2);color:#5ac8fa;padding:6px 12px;border-radius:12px;border:1px solid rgba(90,200,250,0.4);">⚡ <span id="c-st-s">-0%</span></span>
     </div>
 
     <div style="position:relative;z-index:2;">
-      <div style="font-size:13px;font-weight:800;letter-spacing:2px;color:#ffaa00;text-transform:uppercase;margin-bottom:4px;">🧀 CHEESE RNG 🎲</div>
-      <div style="font-size:15px;font-weight:900;color:#ffd700;margin-bottom:14px;background:rgba(255,215,0,0.1);padding:5px 14px;border-radius:14px;display:inline-block;border:1px solid rgba(255,215,0,0.3);">
+      <div style="font-size:18px;font-weight:900;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:8px;">🧀 CHEESE RNG 🎲</div>
+      <div style="font-size:18px;font-weight:900;color:#ffd700;margin-bottom:18px;background:rgba(255,215,0,0.12);padding:8px 20px;border-radius:18px;display:inline-block;border:1px solid rgba(255,215,0,0.35);">
         🧀 <span id="c-coins-val">0</span> Coins
       </div>
 
       <!-- MAIN ROLL VIEW -->
       <div id="c-roll-view">
-        <div id="c-card" style="background:#181820;border-radius:18px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #2a2a38;margin-bottom:16px;padding:14px;box-sizing:border-box;transition:border-color 0.15s, box-shadow 0.15s;">
-          <div style="font-size:48px;margin-bottom:6px;filter:drop-shadow(0 0 12px rgba(255,170,0,0.5));">🧀</div>
-          <div style="font-size:16px;font-weight:600;color:#aaa;text-align:center;">Press Roll to Start</div>
+        <div id="c-card" style="background:#181820;border-radius:22px;height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid #2a2a38;margin-bottom:20px;padding:20px;box-sizing:border-box;transition:border-color 0.15s, box-shadow 0.15s;">
+          <div style="font-size:72px;margin-bottom:10px;filter:drop-shadow(0 0 16px rgba(255,170,0,0.5));">🧀</div>
+          <div style="font-size:22px;font-weight:700;color:#aaa;text-align:center;">Press Roll to Start</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="display:flex;gap:10px;">
-            <button id="c-shop-btn" style="flex:1;background:#282835;color:#ffd700;border:1px solid rgba(255,215,0,0.3);padding:12px;border-radius:12px;font-weight:bold;font-size:13px;cursor:pointer;">🛒 SHOP</button>
-            <button id="c-idx-btn" style="flex:1;background:#282835;color:#ffaa00;border:1px solid rgba(255,170,0,0.3);padding:12px;border-radius:12px;font-weight:bold;font-size:13px;cursor:pointer;">📖 INDEX</button>
+        
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:14px;">
+            <button id="c-shop-btn" style="flex:1;background:#282835;color:#ffd700;border:1px solid rgba(255,215,0,0.3);padding:16px;border-radius:16px;font-weight:bold;font-size:16px;cursor:pointer;">🛒 SHOP</button>
+            <button id="c-idx-btn" style="flex:1;background:#282835;color:#ffaa00;border:1px solid rgba(255,170,0,0.3);padding:16px;border-radius:16px;font-weight:bold;font-size:16px;cursor:pointer;">📖 INDEX</button>
           </div>
-          <button id="c-btn" style="width:100%;background:linear-gradient(135deg,#ffaa00,#ff6600);color:#000;border:none;padding:14px;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 4px 15px rgba(255,170,0,0.4);">🎲 ROLL</button>
+          <button id="c-btn" style="width:100%;background:linear-gradient(135deg,#ffaa00,#ff6600);color:#000;border:none;padding:18px;border-radius:18px;font-weight:900;font-size:20px;cursor:pointer;box-shadow:0 6px 20px rgba(255,170,0,0.4);">🎲 ROLL</button>
         </div>
       </div>
 
       <!-- SHOP VIEW -->
       <div id="c-shop-view" style="display:none;text-align:left;">
-        <div style="background:#181820;border:1px solid #333;border-radius:14px;padding:12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="background:#181820;border:1px solid #333;border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
           <div>
-            <div style="font-weight:bold;color:#ff9500;font-size:14px;">🍀 Luck Boost (Lvl <span id="c-l-lvl">0</span>)</div>
-            <div style="font-size:11px;color:#888;">+20% Luck per Lvl</div>
+            <div style="font-weight:bold;color:#ff9500;font-size:18px;">🍀 Luck Boost (Lvl <span id="c-l-lvl">0</span>)</div>
+            <div style="font-size:13px;color:#888;">+20% Luck per Lvl</div>
           </div>
-          <button id="c-buy-l" style="background:#ffd700;color:#000;border:none;border-radius:10px;padding:8px 12px;font-weight:900;font-size:12px;cursor:pointer;">🧀 <span id="c-l-cost">50</span></button>
+          <button id="c-buy-l" style="background:#ffd700;color:#000;border:none;border-radius:12px;padding:12px 18px;font-weight:900;font-size:15px;cursor:pointer;">🧀 <span id="c-l-cost">50</span></button>
         </div>
-        <div style="background:#181820;border:1px solid #333;border-radius:14px;padding:12px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="background:#181820;border:1px solid #333;border-radius:18px;padding:16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;">
           <div>
-            <div style="font-weight:bold;color:#5ac8fa;font-size:14px;">⚡ Roll Speed (Lvl <span id="c-s-lvl">0</span>)</div>
-            <div style="font-size:11px;color:#888;">-7.5% Roll Time per Lvl</div>
+            <div style="font-weight:bold;color:#5ac8fa;font-size:18px;">⚡ Roll Speed (Lvl <span id="c-s-lvl">0</span>)</div>
+            <div style="font-size:13px;color:#888;">-7.5% Roll Time per Lvl</div>
           </div>
-          <button id="c-buy-s" style="background:#ffd700;color:#000;border:none;border-radius:10px;padding:8px 12px;font-weight:900;font-size:12px;cursor:pointer;">🧀 <span id="c-s-cost">40</span></button>
+          <button id="c-buy-s" style="background:#ffd700;color:#000;border:none;border-radius:12px;padding:12px 18px;font-weight:900;font-size:15px;cursor:pointer;">🧀 <span id="c-s-cost">40</span></button>
         </div>
-        <button id="c-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:bold;cursor:pointer;font-size:13px;margin-bottom:10px;">← BACK TO ROLLING</button>
-        <button id="c-wipe-btn" style="width:100%;background:rgba(255,59,48,0.2);color:#ff3b30;border:1px solid rgba(255,59,48,0.5);padding:10px;border-radius:12px;font-weight:bold;cursor:pointer;font-size:12px;">💥 WIPE DATA</button>
+        <button id="c-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:16px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:16px;margin-bottom:12px;">← BACK TO ROLLING</button>
+        <button id="c-wipe-btn" style="width:100%;background:rgba(255,59,48,0.2);color:#ff3b30;border:1px solid rgba(255,59,48,0.5);padding:14px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:14px;">💥 WIPE DATA</button>
       </div>
 
       <!-- INDEX VIEW -->
       <div id="c-idx-view" style="display:none;text-align:left;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <span style="font-weight:bold;font-size:14px;color:#ffaa00;">📖 CHEESE COLLECTION</span>
-          <span style="font-size:12px;color:#aaa;font-weight:bold;"><span id="c-idx-cnt">0</span>/600</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="font-weight:bold;font-size:18px;color:#ffaa00;">📖 CHEESE COLLECTION</span>
+          <span style="font-size:15px;color:#aaa;font-weight:bold;"><span id="c-idx-cnt">0</span>/600</span>
         </div>
-        <div id="c-idx-list" style="max-height:220px;overflow-y:auto;background:#14141c;border:1px solid #2a2a38;border-radius:14px;padding:8px;margin-bottom:10px;"></div>
-        <button id="c-idx-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:10px;border-radius:12px;font-weight:bold;cursor:pointer;font-size:13px;">← BACK TO ROLLING</button>
+        <div id="c-idx-list" style="max-height:300px;overflow-y:auto;background:#14141c;border:1px solid #2a2a38;border-radius:18px;padding:12px;margin-bottom:14px;"></div>
+        <button id="c-idx-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:16px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:16px;">← BACK TO ROLLING</button>
       </div>
     </div>
   </div>
@@ -219,10 +220,10 @@
       cv.width = box.offsetWidth;
       cv.height = box.offsetHeight;
       let pts = [];
-      for (let i = 0; i < 45; i++) {
+      for (let i = 0; i < 60; i++) {
         let ang = Math.random() * Math.PI * 2;
-        let spd = Math.random() * 8 + 2;
-        pts.push({ x: cv.width / 2, y: cv.height / 2, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, sz: Math.random() * 5 + 2, color: color, alpha: 1 });
+        let spd = Math.random() * 10 + 3;
+        pts.push({ x: cv.width / 2, y: cv.height / 2, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, sz: Math.random() * 7 + 3, color: color, alpha: 1 });
       }
       function draw() {
         ctx.clearRect(0, 0, cv.width, cv.height);
@@ -230,7 +231,7 @@
         pts.forEach(p => {
           p.x += p.vx;
           p.y += p.vy;
-          p.alpha -= 0.025;
+          p.alpha -= 0.02;
           if (p.alpha > 0) {
             active = true;
             ctx.fillStyle = p.color;
@@ -278,9 +279,9 @@
         let item = P[i];
         let isFound = unlocked.includes(item.id);
         if (isFound) {
-          h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;margin-bottom:5px;background:#1c1c28;border-left:4px solid ' + item.tier.c + ';border-radius:8px;font-size:12px;"><div style="font-weight:bold;color:#fff;">#' + item.id + ' ' + item.n + '</div><div style="color:' + item.tier.c + ';font-weight:800;font-size:11px;">' + item.strVal + '</div></div>';
+          h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;margin-bottom:6px;background:#1c1c28;border-left:5px solid ' + item.tier.c + ';border-radius:10px;font-size:14px;"><div style="font-weight:bold;color:#fff;">#' + item.id + ' ' + item.n + '</div><div style="color:' + item.tier.c + ';font-weight:800;font-size:13px;">' + item.strVal + '</div></div>';
         } else {
-          h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;margin-bottom:5px;background:#181820;border-left:4px solid #333;border-radius:8px;font-size:12px;opacity:0.4;"><div style="font-weight:bold;color:#777;">#' + item.id + ' ???</div><div style="color:#555;font-size:11px;">Locked</div></div>';
+          h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;margin-bottom:6px;background:#181820;border-left:5px solid #333;border-radius:10px;font-size:14px;opacity:0.4;"><div style="font-weight:bold;color:#777;">#' + item.id + ' ???</div><div style="color:#555;font-size:13px;">Locked</div></div>';
         }
       }
       document.getElementById('c-idx-list').innerHTML = h;
@@ -357,8 +358,8 @@
         let isFinal = (step >= totalSteps);
         let currentItem = isFinal ? win : P[Math.floor(Math.random() * P.length)];
         card.style.borderColor = currentItem.tier.c;
-        card.style.boxShadow = '0 0 20px ' + currentItem.tier.c + '88';
-        card.innerHTML = '<div style="font-size:12px;font-weight:800;color:#ffaa00;letter-spacing:1px;margin-bottom:6px;">' + (isFinal ? 'DECIDING...' : 'ROLLING...') + '</div><div style="font-size:20px;font-weight:800;color:' + currentItem.tier.c + ';text-align:center;line-height:1.2;margin:4px 0;">' + currentItem.n + '</div><div style="font-size:11px;font-weight:700;color:#777;margin-top:4px;">' + currentItem.strVal + '</div>';
+        card.style.boxShadow = '0 0 30px ' + currentItem.tier.c + '88';
+        card.innerHTML = '<div style="font-size:15px;font-weight:800;color:#ffaa00;letter-spacing:2px;margin-bottom:8px;">' + (isFinal ? 'DECIDING...' : 'ROLLING...') + '</div><div style="font-size:28px;font-weight:900;color:' + currentItem.tier.c + ';text-align:center;line-height:1.2;margin:6px 0;">' + currentItem.n + '</div><div style="font-size:14px;font-weight:700;color:#888;margin-top:6px;">' + currentItem.strVal + '</div>';
 
         let progress = step / totalSteps;
         let pitch = 500 - (progress * 250);
@@ -401,8 +402,8 @@
 
           burst(win.tier.c);
           card.style.borderColor = win.tier.c;
-          card.style.boxShadow = '0 0 30px ' + win.tier.c + 'aa';
-          card.innerHTML = '<div style="font-size:11px;color:#777;font-weight:700;margin-bottom:2px;">#' + win.id + ' / 600</div><div style="font-size:20px;font-weight:900;color:#fff;text-align:center;line-height:1.2;margin:4px 0;text-shadow:0 0 10px ' + win.tier.c + 'aa;">' + win.n + '</div><div style="display:inline-block;padding:4px 14px;border-radius:20px;background:' + win.tier.c + ';color:#000;font-weight:900;font-size:11px;letter-spacing:1px;margin:4px 0;">' + win.tier.n.toUpperCase() + ' (' + win.strVal + ')</div><div style="font-size:13px;font-weight:800;color:#ffd700;margin:2px 0;">+🧀 ' + reward.toLocaleString() + ' Coins</div><div style="font-size:11px;color:#ccc;font-style:italic;text-align:center;line-height:1.2;max-width:300px;">"' + win.tier.q + '"</div>';
+          card.style.boxShadow = '0 0 40px ' + win.tier.c + 'aa';
+          card.innerHTML = '<div style="font-size:13px;color:#888;font-weight:700;margin-bottom:4px;">#' + win.id + ' / 600</div><div style="font-size:28px;font-weight:900;color:#fff;text-align:center;line-height:1.2;margin:6px 0;text-shadow:0 0 12px ' + win.tier.c + 'aa;">' + win.n + '</div><div style="display:inline-block;padding:6px 18px;border-radius:20px;background:' + win.tier.c + ';color:#000;font-weight:900;font-size:13px;letter-spacing:1px;margin:6px 0;">' + win.tier.n.toUpperCase() + ' (' + win.strVal + ')</div><div style="font-size:16px;font-weight:900;color:#ffd700;margin:4px 0;">+🧀 ' + reward.toLocaleString() + ' Coins</div><div style="font-size:13px;color:#ddd;font-style:italic;text-align:center;line-height:1.3;max-width:400px;margin-top:4px;">"' + win.tier.q + '"</div>';
 
           if (win.val >= 10000000) {
             box.style.animation = "rainbowGlow 2s infinite alternate";
@@ -418,7 +419,6 @@
       rollLoop();
     };
 
-    // Initialize stats display
     updateShop();
   </script>
 </body>
