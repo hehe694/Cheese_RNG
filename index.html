@@ -152,7 +152,7 @@
           🍀 Luck: <span id="c-st-l">+0%</span>
         </div>
         <div style="background:rgba(90,200,250,0.15);color:#5ac8fa;padding:8px 16px;border-radius:14px;border:1px solid rgba(90,200,250,0.35);font-size:14px;font-weight:800;">
-          ⚡ Speed: <span id="c-st-s">1x</span>
+          ⚡ Speed: <span id="c-st-s">1.0x</span>
         </div>
       </div>
 
@@ -183,8 +183,8 @@
         </div>
         <div style="background:#181820;border:1px solid #333;border-radius:18px;padding:16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;">
           <div>
-            <div style="font-weight:bold;color:#5ac8fa;font-size:18px;">⚡ Speed Multiplier (<span id="c-s-mult">1</span>x)</div>
-            <div style="font-size:13px;color:#888;">+0.5x Roll Speed per Lvl</div>
+            <div style="font-weight:bold;color:#5ac8fa;font-size:18px;">⚡ Speed Multiplier (<span id="c-s-mult">1.0</span>x)</div>
+            <div style="font-size:13px;color:#888;">+0.1x Roll Speed per Lvl</div>
           </div>
           <button id="c-buy-s" style="background:#ffd700;color:#000;border:none;border-radius:12px;padding:12px 18px;font-weight:900;font-size:15px;cursor:pointer;">🧀 <span id="c-s-cost">40</span></button>
         </div>
@@ -273,7 +273,8 @@
   <script>
     let coins = parseInt(localStorage.getItem('c_rng_coins') || '0') || 0;
     let luckLvl = parseInt(localStorage.getItem('c_rng_luck') || '0') || 0;
-    let spdMult = parseFloat(localStorage.getItem('c_rng_spd_mult') || '1') || 1;
+    let spdLvl = parseInt(localStorage.getItem('c_rng_spd_lvl') || '0') || 0;
+    let spdMult = parseFloat(localStorage.getItem('c_rng_spd_mult') || (1 + spdLvl * 0.1).toFixed(2)) || 1;
     let unlocked = [];
     try { unlocked = JSON.parse(localStorage.getItem('c_rng_unlocked') || '[]'); } catch(e) { unlocked = []; }
 
@@ -405,14 +406,12 @@
       let pts = [];
       let rings = [];
 
-      // Particle count scales strictly with rarity tier (12 up to 300+)
       let particleCount = (tIdx + 1) * 22;
       let emojiList = win.tier.emojis || [];
       let useEmojis = emojiList.length > 0;
 
       for (let i = 0; i < particleCount; i++) {
         let ang = Math.random() * Math.PI * 2;
-        // Boom speed scales per tier!
         let spd = Math.random() * (4 + tIdx * 1.2) + 2;
         let col = win.tier.godly ? ['#ffffff','#ffee00','#ff6600','#ff0044'][i%4] : win.tier.c;
 
@@ -430,7 +429,6 @@
         });
       }
 
-      /* Shockwave Rings scale per Tier (1 ring for Uncommon/Rare, up to 4 rings for Godly) */
       let numRings = Math.min(Math.floor(tIdx / 3), 4);
       for (let r = 0; r < numRings; r++) {
         rings.push({
@@ -447,7 +445,6 @@
         ctx.clearRect(0, 0, cv.width, cv.height);
         let active = false;
 
-        /* Draw Shockwave Boom Rings */
         rings.forEach(rg => {
           if (rg.alpha > 0) {
             active = true;
@@ -464,12 +461,11 @@
           }
         });
 
-        /* Draw Boom Particles & Emojis */
         pts.forEach(p => {
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += 0.15; // Gravity
-          p.alpha -= (0.015 + (13 - tIdx) * 0.002); // Higher tier particles stay longer!
+          p.vy += 0.15;
+          p.alpha -= (0.015 + (13 - tIdx) * 0.002);
           p.rot += p.vRot;
           if (p.alpha > 0) {
             active = true;
@@ -504,30 +500,24 @@
 
       box.classList.remove('c-shake-sm', 'c-shake-lg');
 
-      // 1. Screen Shake: Common/Uncommon = None, Rare-Epic = Small Shake, Legendary+ = Heavy Shake
       if (tIdx >= 2 && tIdx <= 4) {
         box.classList.add('c-shake-sm');
       } else if (tIdx >= 5) {
         box.classList.add('c-shake-lg');
       }
 
-      // 2. Full Screen Color Flash (Scales in brightness/opacity per tier)
       if (tIdx >= 2) {
         flashEl.style.background = win.tier.c;
         flashEl.style.opacity = Math.min(0.2 + (tIdx * 0.05), 0.85).toString();
         setTimeout(() => flashEl.style.opacity = '0', 150 + (tIdx * 20));
       }
 
-      // 3. SOUND BOOM GENERATOR (Unique Frequency Boom Blast for each Rarity!)
-      // Base frequency drops deeper, gain gets stronger, and sub-harmonics layer in!
-      let boomPitch = Math.max(60, 450 - (tIdx * 28)); // Lower frequency = deeper boom sound
+      let boomPitch = Math.max(60, 450 - (tIdx * 28));
       let gainVal = Math.min(0.08 + (tIdx * 0.035), 0.5);
 
-      // Deep Sub-Bass Synth Blast
       snd(boomPitch, 'sawtooth', gainVal, 0.2 + (tIdx * 0.03));
       snd(boomPitch / 2, 'sine', gainVal * 0.8, 0.3 + (tIdx * 0.04));
 
-      // Multi-Note Victory Fanfare layers on top as Rarity increases!
       if (tIdx >= 2) {
         setTimeout(() => snd(boomPitch * 1.25, 'square', gainVal * 0.6, 0.15), 60);
       }
@@ -542,7 +532,6 @@
       }
     }
 
-    /* Populate Admin Rarity Dropdowns & Cheese Selectors */
     function populateDropdowns() {
       let rarities = ["ALL", ...T.map(t => t.n)];
       let rarHtml = rarities.map(r => '<option value="' + r + '">' + (r === "ALL" ? "All Rarities" : r) + '</option>').join('');
@@ -577,7 +566,6 @@
       }
     }
 
-    // Attach Dropdown Event Listeners
     ['rig', 'idx'].forEach(prefix => {
       document.getElementById('adm-' + prefix + '-rarity').onchange = () => updateFilterDropdown('adm-' + prefix);
       document.getElementById('adm-' + prefix + '-odds').onchange = () => updateFilterDropdown('adm-' + prefix);
@@ -592,7 +580,6 @@
       snd(880, 'square', 0.2);
     }
 
-    /* Secret Typing Code 'CHEEZE' */
     let keyBuffer = '';
     window.addEventListener('keydown', (e) => {
       if (e.key.length === 1) {
@@ -605,7 +592,6 @@
       }
     });
 
-    /* Secret Click Title -> Passcode Prompt */
     document.getElementById('c-title').onclick = () => {
       let code = prompt("Enter Admin Passcode (Case Sensitive):");
       if (code && code === 'CHEEZE') {
@@ -620,7 +606,6 @@
       rView.style.display = 'block';
     };
 
-    /* Admin Actions */
     document.getElementById('adm-add-coins').onclick = () => {
       let val = parseInt(document.getElementById('adm-coins-input').value || '0');
       coins += val;
@@ -650,7 +635,7 @@
       spdMult = Math.max(0.1, val);
       localStorage.setItem('c_rng_spd_mult', spdMult);
       updateShop();
-      alert('Roll Speed set directly to ' + spdMult + 'x Multiplier! ⚡');
+      alert('Roll Speed set directly to ' + spdMult.toFixed(1) + 'x Multiplier! ⚡');
     };
 
     document.getElementById('adm-set-rig').onclick = () => {
@@ -727,16 +712,17 @@
       document.getElementById('c-idx-list').innerHTML = h;
     }
 
+    /* REBALANCED SPEED UPGRADES: GIVES +0.1x ROLL SPEED PER LEVEL (+10%) */
     function updateShop() {
       let lCost = Math.floor(50 * Math.pow(1.5, luckLvl));
-      let sCost = Math.floor(40 * Math.pow(1.5, spdMult));
+      let sCost = Math.floor(40 * Math.pow(1.35, spdLvl));
       document.getElementById('c-l-lvl').innerText = luckLvl;
       document.getElementById('c-l-cost').innerText = lCost.toLocaleString();
-      document.getElementById('c-s-mult').innerText = spdMult;
+      document.getElementById('c-s-mult').innerText = spdMult.toFixed(1);
       document.getElementById('c-s-cost').innerText = sCost.toLocaleString();
       document.getElementById('c-coins-val').innerText = coins.toLocaleString();
       if (document.getElementById('c-st-l')) document.getElementById('c-st-l').innerText = '+' + (luckLvl * 20) + '%';
-      if (document.getElementById('c-st-s')) document.getElementById('c-st-s').innerText = spdMult + 'x';
+      if (document.getElementById('c-st-s')) document.getElementById('c-st-s').innerText = spdMult.toFixed(1) + 'x';
     }
 
     document.getElementById('c-buy-l').onclick = () => {
@@ -753,12 +739,15 @@
       }
     };
 
+    /* Buy Speed - Gives +0.1x per level (Nerfed down from +0.5x) */
     document.getElementById('c-buy-s').onclick = () => {
-      let sCost = Math.floor(40 * Math.pow(1.5, spdMult));
+      let sCost = Math.floor(40 * Math.pow(1.35, spdLvl));
       if (coins >= sCost) {
         coins -= sCost;
-        spdMult += 0.5;
+        spdLvl++;
+        spdMult = 1 + (spdLvl * 0.10);
         localStorage.setItem('c_rng_coins', coins);
+        localStorage.setItem('c_rng_spd_lvl', spdLvl);
         localStorage.setItem('c_rng_spd_mult', spdMult);
         snd(880, 'sine', 0.15);
         updateShop();
@@ -771,10 +760,12 @@
       if (confirm('Are you sure you want to wipe all cheese progress? 🧀💥')) {
         localStorage.removeItem('c_rng_coins');
         localStorage.removeItem('c_rng_luck');
+        localStorage.removeItem('c_rng_spd_lvl');
         localStorage.removeItem('c_rng_spd_mult');
         localStorage.removeItem('c_rng_unlocked');
         coins = 0;
         luckLvl = 0;
+        spdLvl = 0;
         spdMult = 1;
         unlocked = [];
         updateShop();
@@ -834,7 +825,6 @@
           localStorage.setItem('c_rng_coins', coins);
           document.getElementById('c-coins-val').innerText = coins.toLocaleString();
 
-          /* Trigger Rarity-Specific Explosion Boom */
           triggerTierFX(win);
 
           let badgeClass = win.tier.godly ? 'godly-badge' : '';
