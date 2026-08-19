@@ -27,6 +27,19 @@
       overflow-x: hidden;
     }
 
+    /* Screen Flash Overlay for Rare Rolls */
+    #c-screen-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.05s ease-out;
+    }
+
     /* Main Container Card */
     #c-rng-ui {
       position: relative;
@@ -42,19 +55,33 @@
       overflow: hidden;
     }
 
-    /* Keyframe Animations */
+    /* Dynamic Shake Animations */
+    @keyframes cShakeLight {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(-3px, 3px); }
+      50% { transform: translate(3px, -3px); }
+      75% { transform: translate(-2px, -2px); }
+    }
+
+    @keyframes cShakeHeavy {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-8px, -6px) rotate(-2deg); }
+      30% { transform: translate(8px, 6px) rotate(2deg); }
+      45% { transform: translate(-10px, 4px) rotate(-1.5deg); }
+      60% { transform: translate(10px, -6px) rotate(1.5deg); }
+      75% { transform: translate(-6px, 8px) rotate(-1deg); }
+      90% { transform: translate(6px, -4px) rotate(1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
     @keyframes cPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
     }
     @keyframes cLand {
-      0% { transform: scale(1.2); filter: brightness(1.8); }
-      60% { transform: scale(0.96); }
+      0% { transform: scale(1.25); filter: brightness(2); }
+      60% { transform: scale(0.95); }
       100% { transform: scale(1); filter: brightness(1); }
-    }
-    @keyframes cFlash {
-      0% { background: rgba(255, 255, 255, 0.7); }
-      100% { background: transparent; }
     }
 
     /* GODLY Animated Color Cycle */
@@ -74,9 +101,10 @@
     .godly-border { animation: wyorColorShift 1.2s infinite alternate ease-in-out !important; }
     .godly-badge { animation: wyorBadgeShift 1.2s infinite alternate ease-in-out !important; }
 
+    .c-shake-sm { animation: cShakeLight 0.3s ease-in-out !important; }
+    .c-shake-lg { animation: cShakeHeavy 0.6s ease-in-out !important; }
     .c-rolling-card { animation: cPulse 0.4s infinite ease-in-out !important; }
-    .c-land-fx { animation: cLand 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
-    .c-flash-fx { animation: cFlash 0.3s ease-out; }
+    .c-land-fx { animation: cLand 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
 
     /* Admin Inputs & Selects */
     .admin-input {
@@ -102,6 +130,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Full Screen Color Flash Layer -->
+  <div id="c-screen-flash"></div>
 
   <div id="c-rng-ui">
     <canvas id="c-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
@@ -249,18 +280,19 @@
     let riggedNextRoll = null;
 
     let actx = null;
-    function snd(f, t, v) {
+    function snd(f, t, v, duration) {
       try {
         if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
         let o = actx.createOscillator(), g = actx.createGain();
         o.type = t || 'sine';
         o.frequency.value = f;
+        let d = duration || 0.15;
         g.gain.setValueAtTime(v || 0.05, actx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + 0.15);
+        g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + d);
         o.connect(g);
         g.connect(actx.destination);
         o.start();
-        o.stop(actx.currentTime + 0.15);
+        o.stop(actx.currentTime + d);
       } catch(e) {}
     }
 
@@ -314,7 +346,7 @@
     P[P.length - 2] = {
       id: 1099,
       n: "⚡ EJ ⚡",
-      val: 25000000000000, /* 25 Trillion Odds */
+      val: 25000000000000,
       strVal: "1/25,000,000,000,000",
       tier: godlyTier,
       w: 1 / 25000000000000
@@ -323,7 +355,7 @@
     P[P.length - 1] = {
       id: 1100,
       n: "👑 CHEESEGUY 🧀",
-      val: 45000000000000, /* 45 Trillion Odds */
+      val: 45000000000000,
       strVal: "1/45,000,000,000,000",
       tier: godlyTier,
       w: 1 / 45000000000000
@@ -355,40 +387,153 @@
     const sView = document.getElementById('c-shop-view');
     const iView = document.getElementById('c-idx-view');
     const aView = document.getElementById('c-admin-view');
+    const flashEl = document.getElementById('c-screen-flash');
     let rolling = false;
 
-    function burst(colorArray) {
+    /* ENHANCED MULTI-TIER PARTICLES & SHOCKWAVES */
+    function superBurst(win) {
       let cv = document.getElementById('c-canvas');
       if (!cv) return;
       let ctx = cv.getContext('2d');
       cv.width = box.offsetWidth;
       cv.height = box.offsetHeight;
+
       let pts = [];
-      for (let i = 0; i < 75; i++) {
+      let rings = [];
+
+      let count = 40;
+      let useEmojis = false;
+      let emojis = ['🧀', '✨'];
+
+      if (win.val >= 1500) count = 80;
+      if (win.val >= 100000) { count = 150; useEmojis = true; emojis = ['🧀', '✨', '⭐', '🔥']; }
+      if (win.val >= 1000000000 || win.tier.godly) { count = 250; useEmojis = true; emojis = ['🧀', '⚡', '👑', '🗿', '🔥', '✨', '💎']; }
+
+      for (let i = 0; i < count; i++) {
         let ang = Math.random() * Math.PI * 2;
-        let spd = Math.random() * 12 + 4;
-        let chosenColor = Array.isArray(colorArray) ? colorArray[Math.floor(Math.random() * colorArray.length)] : colorArray;
-        pts.push({ x: cv.width / 2, y: cv.height / 2, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, sz: Math.random() * 8 + 3, color: chosenColor, alpha: 1 });
+        let spd = Math.random() * (win.val >= 100000 ? 18 : 10) + 4;
+        let col = win.tier.godly ? ['#ffffff','#ffee00','#ff6600','#ff0044'][i%4] : win.tier.c;
+
+        pts.push({
+          x: cv.width / 2,
+          y: cv.height / 2,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd,
+          sz: Math.random() * 10 + 4,
+          color: col,
+          alpha: 1,
+          emoji: useEmojis ? emojis[Math.floor(Math.random() * emojis.length)] : null,
+          rot: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 12
+        });
       }
+
+      /* Shockwave Rings for Legendary+ */
+      if (win.val >= 10000) {
+        rings.push({ r: 5, maxR: cv.width * 0.75, color: win.tier.c, alpha: 1, lw: 8 });
+      }
+      if (win.val >= 1000000000 || win.tier.godly) {
+        rings.push({ r: 5, maxR: cv.width * 1.2, color: '#ffffff', alpha: 1, lw: 14 });
+      }
+
       function draw() {
         ctx.clearRect(0, 0, cv.width, cv.height);
         let active = false;
+
+        /* Shockwaves */
+        rings.forEach(rg => {
+          if (rg.alpha > 0) {
+            active = true;
+            rg.r += 14;
+            rg.alpha -= 0.025;
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cv.width / 2, cv.height / 2, rg.r, 0, Math.PI * 2);
+            ctx.strokeStyle = rg.color;
+            ctx.globalAlpha = Math.max(0, rg.alpha);
+            ctx.lineWidth = rg.lw;
+            ctx.stroke();
+            ctx.restore();
+          }
+        });
+
+        /* Particles */
         pts.forEach(p => {
           p.x += p.vx;
           p.y += p.vy;
-          p.alpha -= 0.02;
+          p.vy += 0.18; /* Gravity effect */
+          p.alpha -= (win.val >= 100000 ? 0.012 : 0.022);
+          p.rot += p.vRot;
           if (p.alpha > 0) {
             active = true;
-            ctx.fillStyle = p.color;
+            ctx.save();
             ctx.globalAlpha = Math.max(0, p.alpha);
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
-            ctx.fill();
+            if (p.emoji) {
+              ctx.font = (p.sz * 2.2) + 'px sans-serif';
+              ctx.translate(p.x, p.y);
+              ctx.rotate(p.rot * Math.PI / 180);
+              ctx.fillText(p.emoji, -p.sz, p.sz / 2);
+            } else {
+              ctx.fillStyle = p.color;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
           }
         });
+
         if (active) requestAnimationFrame(draw);
       }
       draw();
+    }
+
+    /* Dynamic Visual & Sound Effects Trigger */
+    function triggerTierFX(win) {
+      superBurst(win);
+
+      /* Screen Shake & Flashes based on Cheese Quality */
+      box.classList.remove('c-shake-sm', 'c-shake-lg');
+
+      if (win.tier.godly || win.val >= 1000000000) {
+        /* GODLY / SIGMA / GLITCH / QUANTUM (1B+) */
+        box.classList.add('c-shake-lg');
+        flashEl.style.background = win.tier.c;
+        flashEl.style.opacity = '0.7';
+        setTimeout(() => flashEl.style.opacity = '0', 300);
+
+        // Sub-Bass Boom + Fanfare
+        snd(100, 'sawtooth', 0.4, 0.4);
+        setTimeout(() => snd(523.25, 'square', 0.25), 80);
+        setTimeout(() => snd(659.25, 'square', 0.25), 160);
+        setTimeout(() => snd(783.99, 'square', 0.25), 240);
+        setTimeout(() => snd(1046.50, 'square', 0.35), 320);
+        setTimeout(() => snd(1567.98, 'square', 0.45, 0.6), 400);
+
+      } else if (win.val >= 100000) {
+        /* MYTHIC / EXOTIC / DIVINE / CELESTIAL (100k - 100M) */
+        box.classList.add('c-shake-sm');
+        flashEl.style.background = win.tier.c;
+        flashEl.style.opacity = '0.4';
+        setTimeout(() => flashEl.style.opacity = '0', 200);
+
+        // Synth Chime
+        snd(440, 'triangle', 0.2);
+        setTimeout(() => snd(554.37, 'triangle', 0.2), 100);
+        setTimeout(() => snd(659.25, 'triangle', 0.25), 200);
+        setTimeout(() => snd(880.00, 'triangle', 0.3), 300);
+
+      } else if (win.val >= 1500) {
+        /* EPIC / LEGENDARY (1.5k - 10k) */
+        box.classList.add('c-shake-sm');
+        snd(523.25, 'sine', 0.15);
+        setTimeout(() => snd(659.25, 'sine', 0.15), 100);
+        setTimeout(() => snd(783.99, 'sine', 0.2), 200);
+
+      } else {
+        /* COMMON / UNCOMMON / RARE (< 1.5k) */
+        snd(523.25, 'sine', 0.1);
+      }
     }
 
     /* Populate Admin Rarity Dropdowns & Cheese Selectors */
@@ -441,7 +586,7 @@
       snd(880, 'square', 0.2);
     }
 
-    /* Secret Typing Code 'CHEEZE' (STRICTLY CASE SENSITIVE) */
+    /* Secret Typing Code 'CHEEZE' */
     let keyBuffer = '';
     window.addEventListener('keydown', (e) => {
       if (e.key.length === 1) {
@@ -454,7 +599,7 @@
       }
     });
 
-    /* Secret Click Title -> Passcode Prompt (STRICTLY CASE SENSITIVE) */
+    /* Secret Click Title -> Passcode Prompt */
     document.getElementById('c-title').onclick = () => {
       let code = prompt("Enter Admin Passcode (Case Sensitive):");
       if (code && code === 'CHEEZE') {
@@ -494,7 +639,6 @@
       alert('Luck set to Level ' + luckLvl + '! 🍀');
     };
 
-    /* Set Exact Speed Multiplier */
     document.getElementById('adm-set-spd').onclick = () => {
       let val = parseFloat(document.getElementById('adm-spd-input').value || '1');
       spdMult = Math.max(0.1, val);
@@ -669,7 +813,6 @@
             let slowRatio = (step - halfSteps) / (totalSteps - halfSteps);
             delay = baseDelay + Math.pow(slowRatio, 2.5) * 350;
           }
-          /* Apply Direct Speed Multiplier */
           delay = Math.max(1, delay / spdMult);
           setTimeout(rollLoop, delay);
         } else {
@@ -679,29 +822,14 @@
           }
           card.classList.remove('c-rolling-card');
           card.classList.add('c-land-fx');
-          box.classList.add('c-flash-fx');
-          setTimeout(() => box.classList.remove('c-flash-fx'), 300);
 
           let reward = Math.max(1, Math.floor(win.val / 2));
           coins += reward;
           localStorage.setItem('c_rng_coins', coins);
           document.getElementById('c-coins-val').innerText = coins.toLocaleString();
 
-          if (win.tier.godly) {
-            snd(880, 'square', 0.25);
-            setTimeout(() => snd(1174.66, 'square', 0.25), 100);
-            setTimeout(() => snd(1567.98, 'square', 0.3), 200);
-            setTimeout(() => snd(2093.00, 'square', 0.35), 300);
-            burst(['#ffffff', '#ffee00', '#ff6600', '#ff0044']);
-          } else if (win.val >= 100000) {
-            snd(880, 'triangle', 0.2);
-            setTimeout(() => snd(1174.66, 'triangle', 0.2), 120);
-            setTimeout(() => snd(1396.91, 'triangle', 0.25), 240);
-            burst(win.tier.c);
-          } else {
-            snd(523.25, 'sine', 0.1);
-            burst(win.tier.c);
-          }
+          /* Trigger Multi-tier Effects */
+          triggerTierFX(win);
 
           let badgeClass = win.tier.godly ? 'godly-badge' : '';
           let badgeStyle = win.tier.godly ? '' : 'background:' + win.tier.c + ';color:#000;';
