@@ -43,10 +43,6 @@
     }
 
     /* Keyframe Animations */
-    @keyframes cPop {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
     @keyframes cPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
@@ -81,6 +77,28 @@
     .c-rolling-card { animation: cPulse 0.4s infinite ease-in-out !important; }
     .c-land-fx { animation: cLand 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
     .c-flash-fx { animation: cFlash 0.3s ease-out; }
+
+    /* Admin Inputs */
+    .admin-input {
+      background: #101018;
+      border: 1px solid #3a3a4d;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .admin-btn {
+      background: #ffaa00;
+      color: #000;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
@@ -89,8 +107,8 @@
     <canvas id="c-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
 
     <div style="position:relative;z-index:2;">
-      <!-- MAIN TITLE -->
-      <h1 style="font-size:32px;font-weight:900;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:20px;text-shadow:0 0 15px rgba(255,170,0,0.4);">
+      <!-- MAIN TITLE (Tap for Admin Passcode) -->
+      <h1 id="c-title" style="font-size:32px;font-weight:900;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:20px;text-shadow:0 0 15px rgba(255,170,0,0.4);cursor:pointer;">
         🧀 CHEESE RNG 🎲
       </h1>
 
@@ -152,6 +170,52 @@
         <div id="c-idx-list" style="max-height:300px;overflow-y:auto;background:#14141c;border:1px solid #2a2a38;border-radius:18px;padding:12px;margin-bottom:14px;"></div>
         <button id="c-idx-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:16px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:16px;">← BACK TO ROLLING</button>
       </div>
+
+      <!-- ADMIN PANEL VIEW -->
+      <div id="c-admin-view" style="display:none;text-align:left;">
+        <div style="font-size:20px;font-weight:900;color:#ff3b30;margin-bottom:16px;text-align:center;">⚡ SECRET CHEEZE ADMIN PANEL 👑</div>
+        
+        <!-- COINS -->
+        <div style="background:#181820;border:1px solid #333;border-radius:16px;padding:14px;margin-bottom:12px;">
+          <div style="font-weight:bold;color:#ffd700;margin-bottom:6px;">🧀 COIN MANAGER</div>
+          <input type="number" id="adm-coins-input" class="admin-input" placeholder="Amount (e.g. 1000000)">
+          <div style="display:flex;gap:8px;">
+            <button id="adm-add-coins" class="admin-btn" style="flex:1;">➕ Add Coins</button>
+            <button id="adm-set-coins" class="admin-btn" style="flex:1;background:#34c759;color:#fff;">🎯 Set Coins</button>
+          </div>
+        </div>
+
+        <!-- STATS / UPGRADES -->
+        <div style="background:#181820;border:1px solid #333;border-radius:16px;padding:14px;margin-bottom:12px;">
+          <div style="font-weight:bold;color:#ff9500;margin-bottom:6px;">🍀 LUCK & ⚡ SPEED LEVEL</div>
+          <div style="display:flex;gap:8px;margin-bottom:6px;">
+            <input type="number" id="adm-luck-input" class="admin-input" placeholder="Luck Level" style="margin:0;">
+            <button id="adm-set-luck" class="admin-btn" style="width:100px;">Set Luck</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <input type="number" id="adm-spd-input" class="admin-input" placeholder="Speed Level (0-5)" style="margin:0;">
+            <button id="adm-set-spd" class="admin-btn" style="width:100px;background:#5ac8fa;color:#000;">Set Speed</button>
+          </div>
+        </div>
+
+        <!-- RIG NEXT ROLL -->
+        <div style="background:#181820;border:1px solid #333;border-radius:16px;padding:14px;margin-bottom:12px;">
+          <div style="font-weight:bold;color:#af52de;margin-bottom:6px;">🎯 RIG NEXT ROLL</div>
+          <input type="number" id="adm-rig-input" class="admin-input" placeholder="Cheese ID (1 - 1100, e.g. 1100 for CheeseGuy)">
+          <button id="adm-set-rig" class="admin-btn" style="width:100%;background:#af52de;color:#fff;">🎯 Set Next Roll</button>
+          <div id="adm-rig-status" style="font-size:12px;color:#aaa;margin-top:6px;font-style:italic;">No roll rigged.</div>
+        </div>
+
+        <!-- ADD CHEESE TO INDEX -->
+        <div style="background:#181820;border:1px solid #333;border-radius:16px;padding:14px;margin-bottom:16px;">
+          <div style="font-weight:bold;color:#00ffcc;margin-bottom:6px;">📖 UNLOCK SPECIFIC CHEESE TO INDEX</div>
+          <input type="number" id="adm-idx-input" class="admin-input" placeholder="Cheese ID to Unlock (1 - 1100)">
+          <button id="adm-add-idx" class="admin-btn" style="width:100%;background:#00ffcc;color:#000;">🔓 Unlock to Index</button>
+        </div>
+
+        <button id="adm-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:16px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:16px;">← EXIT ADMIN PANEL</button>
+      </div>
+
     </div>
   </div>
 
@@ -161,6 +225,8 @@
     let spdLvl = parseInt(localStorage.getItem('c_rng_spd') || '0') || 0;
     let unlocked = [];
     try { unlocked = JSON.parse(localStorage.getItem('c_rng_unlocked') || '[]'); } catch(e) { unlocked = []; }
+
+    let riggedNextRoll = null; // Secret rigged item ID
 
     let actx = null;
     function snd(f, t, v) {
@@ -246,6 +312,13 @@
     };
 
     function rollItem() {
+      if (riggedNextRoll !== null) {
+        let found = P.find(x => x.id === riggedNextRoll);
+        riggedNextRoll = null; // reset after roll
+        document.getElementById('adm-rig-status').innerText = 'No roll rigged.';
+        if (found) return found;
+      }
+
       let luckMult = 1 + (luckLvl * 0.20);
       let dw = P.map(x => Math.pow(x.w, 1 / luckMult));
       let tw = dw.reduce((a, b) => a + b, 0);
@@ -263,6 +336,7 @@
     const rView = document.getElementById('c-roll-view');
     const sView = document.getElementById('c-shop-view');
     const iView = document.getElementById('c-idx-view');
+    const aView = document.getElementById('c-admin-view');
     let rolling = false;
 
     function burst(colorArray) {
@@ -299,9 +373,105 @@
       draw();
     }
 
+    function openAdmin() {
+      rView.style.display = 'none';
+      sView.style.display = 'none';
+      iView.style.display = 'none';
+      aView.style.display = 'block';
+      snd(880, 'square', 0.2);
+    }
+
+    /* Secret Typing Code 'CHEEZE' */
+    let keyBuffer = '';
+    window.addEventListener('keydown', (e) => {
+      keyBuffer += e.key.toUpperCase();
+      if (keyBuffer.length > 15) keyBuffer = keyBuffer.slice(-15);
+      if (keyBuffer.includes('CHEEZE')) {
+        openAdmin();
+        keyBuffer = '';
+      }
+    });
+
+    /* Secret Click Title -> Passcode Prompt */
+    document.getElementById('c-title').onclick = () => {
+      let code = prompt("Enter Admin Passcode:");
+      if (code && code.toUpperCase() === 'CHEEZE') {
+        openAdmin();
+      } else if (code !== null) {
+        alert("Wrong code! ❌");
+      }
+    };
+
+    document.getElementById('adm-back-btn').onclick = () => {
+      aView.style.display = 'none';
+      rView.style.display = 'block';
+    };
+
+    /* Admin Actions */
+    document.getElementById('adm-add-coins').onclick = () => {
+      let val = parseInt(document.getElementById('adm-coins-input').value || '0');
+      coins += val;
+      localStorage.setItem('c_rng_coins', coins);
+      updateShop();
+      alert('Added ' + val.toLocaleString() + ' coins! 🧀');
+    };
+
+    document.getElementById('adm-set-coins').onclick = () => {
+      let val = parseInt(document.getElementById('adm-coins-input').value || '0');
+      coins = val;
+      localStorage.setItem('c_rng_coins', coins);
+      updateShop();
+      alert('Set coins to ' + val.toLocaleString() + '! 🧀');
+    };
+
+    document.getElementById('adm-set-luck').onclick = () => {
+      let val = parseInt(document.getElementById('adm-luck-input').value || '0');
+      luckLvl = Math.max(0, val);
+      localStorage.setItem('c_rng_luck', luckLvl);
+      updateShop();
+      alert('Luck set to Level ' + luckLvl + '! 🍀');
+    };
+
+    document.getElementById('adm-set-spd').onclick = () => {
+      let val = parseInt(document.getElementById('adm-spd-input').value || '0');
+      spdLvl = Math.max(0, val);
+      localStorage.setItem('c_rng_spd', spdLvl);
+      updateShop();
+      alert('Speed deduction set to Level ' + spdLvl + '! ⚡');
+    };
+
+    document.getElementById('adm-set-rig').onclick = () => {
+      let val = parseInt(document.getElementById('adm-rig-input').value || '0');
+      let item = P.find(x => x.id === val);
+      if (item) {
+        riggedNextRoll = item.id;
+        document.getElementById('adm-rig-status').innerText = 'Rigged next roll: #' + item.id + ' ' + item.n;
+        alert('Next roll rigged to: #' + item.id + ' ' + item.n + '! 🎯');
+      } else {
+        alert('Invalid Cheese ID! Must be between 1 and 1100.');
+      }
+    };
+
+    document.getElementById('adm-add-idx').onclick = () => {
+      let val = parseInt(document.getElementById('adm-idx-input').value || '0');
+      let item = P.find(x => x.id === val);
+      if (item) {
+        if (!unlocked.includes(item.id)) {
+          unlocked.push(item.id);
+          localStorage.setItem('c_rng_unlocked', JSON.stringify(unlocked));
+          alert('Added #' + item.id + ' ' + item.n + ' to Index! 📖');
+        } else {
+          alert('Cheese #' + item.id + ' is already unlocked in Index!');
+        }
+      } else {
+        alert('Invalid Cheese ID! Must be between 1 and 1100.');
+      }
+    };
+
     document.getElementById('c-shop-btn').onclick = () => {
       rView.style.display = 'none';
       iView.style.display = 'none';
+      aView.style.display = 'none';
       sView.style.display = 'block';
       updateShop();
     };
@@ -309,6 +479,7 @@
     document.getElementById('c-idx-btn').onclick = () => {
       rView.style.display = 'none';
       sView.style.display = 'none';
+      aView.style.display = 'none';
       iView.style.display = 'block';
       updateIndex();
     };
@@ -316,12 +487,14 @@
     document.getElementById('c-back-btn').onclick = () => {
       sView.style.display = 'none';
       iView.style.display = 'none';
+      aView.style.display = 'none';
       rView.style.display = 'block';
     };
 
     document.getElementById('c-idx-back-btn').onclick = () => {
       sView.style.display = 'none';
       iView.style.display = 'none';
+      aView.style.display = 'none';
       rView.style.display = 'block';
     };
 
