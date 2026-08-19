@@ -58,19 +58,19 @@
     /* Dynamic Shake Animations */
     @keyframes cShakeLight {
       0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(-3px, 3px); }
-      50% { transform: translate(3px, -3px); }
-      75% { transform: translate(-2px, -2px); }
+      25% { transform: translate(-4px, 4px); }
+      50% { transform: translate(4px, -4px); }
+      75% { transform: translate(-3px, -3px); }
     }
 
     @keyframes cShakeHeavy {
       0% { transform: translate(0, 0) rotate(0deg); }
-      15% { transform: translate(-8px, -6px) rotate(-2deg); }
-      30% { transform: translate(8px, 6px) rotate(2deg); }
-      45% { transform: translate(-10px, 4px) rotate(-1.5deg); }
-      60% { transform: translate(10px, -6px) rotate(1.5deg); }
-      75% { transform: translate(-6px, 8px) rotate(-1deg); }
-      90% { transform: translate(6px, -4px) rotate(1deg); }
+      15% { transform: translate(-12px, -10px) rotate(-4deg); }
+      30% { transform: translate(12px, 10px) rotate(4deg); }
+      45% { transform: translate(-15px, 8px) rotate(-3deg); }
+      60% { transform: translate(15px, -10px) rotate(3deg); }
+      75% { transform: translate(-10px, 12px) rotate(-2deg); }
+      90% { transform: translate(10px, -8px) rotate(2deg); }
       100% { transform: translate(0, 0) rotate(0deg); }
     }
 
@@ -101,8 +101,8 @@
     .godly-border { animation: wyorColorShift 1.2s infinite alternate ease-in-out !important; }
     .godly-badge { animation: wyorBadgeShift 1.2s infinite alternate ease-in-out !important; }
 
-    .c-shake-sm { animation: cShakeLight 0.3s ease-in-out !important; }
-    .c-shake-lg { animation: cShakeHeavy 0.6s ease-in-out !important; }
+    .c-shake-sm { animation: cShakeLight 0.35s ease-in-out !important; }
+    .c-shake-lg { animation: cShakeHeavy 0.65s ease-in-out !important; }
     .c-rolling-card { animation: cPulse 0.4s infinite ease-in-out !important; }
     .c-land-fx { animation: cLand 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
 
@@ -298,21 +298,22 @@
 
     const B = ["Cheddar","Gouda","Brie","Swiss","Camembert","Parmesan","Mozzarella","Provolone","Gruyère","Manchego","Blue Cheese","Feta","Havarti","Gorgonzola","Asiago","Ricotta","Fontina","Taleggio","Edam","Cotija","Emmental","Raclette","Roquefort","Pecorino","Monterey Jack","Colby","Stilton","Burrata","Münster","Halloumi","Mascarpone","Reblochon","Beaufort","Appenzeller","Mimolette","Oaxaca","Kasseri","Wensleydale","Red Leicester","Jarlsberg","Derby","Caerphilly","Mahón","Pont-l'Évêque","Époisses","Morbier","Tomme","Vacherin","Scamorza","Telepan","Abertam","Bresse Bleu","Cabrales","Danablu","Gjetost","Leyden","Majorero","Nokkelost","Roncal","Tilsit"];
     
+    // 14 DISTINCT RARITY TIERS WITH TIER INDEX 0 to 13
     const T = [
-      { m: 10, n: "Common", c: "#8e8e93", q: "A simple culinary slice." },
-      { m: 50, n: "Uncommon", c: "#34c759", q: "Freshly crafted with rich texture." },
-      { m: 250, n: "Rare", c: "#007aff", q: "Artisanal quality, perfectly aged." },
-      { m: 1500, n: "Epic", c: "#af52de", q: "Exceptional flavor with rare spices." },
-      { m: 10000, n: "Legendary", c: "#ff9500", q: "Masterwork wheel. Highly prized!" },
-      { m: 100000, n: "Mythic", c: "#ff2d55", q: "Sought by grand connoisseurs worldwide." },
-      { m: 1000000, n: "Exotic", c: "#5ac8fa", q: "Forged through ancient secrets." },
-      { m: 10000000, n: "Divine", c: "#ffd700", q: "A sacred wheel of glowing gold!" },
-      { m: 100000000, n: "Celestial", c: "#00ffcc", q: "A mythical creation beyond mortals!" },
-      { m: 1000000000, n: "Galactic", c: "#9d4edd", q: "Spanning entire solar systems of pure dairy." },
-      { m: 10000000000, n: "Quantum", c: "#00f5d4", q: "Existing in every dimension simultaneously." },
-      { m: 100000000000, n: "Glitch", c: "#ff007f", q: "Reality breaks in the presence of this slice! 👾" },
-      { m: 1000000000000, n: "Sigma", c: "#ff00ff", q: "Pure unadulterated brainrot cheese energy 🗿🧀" },
-      { m: Infinity, n: "GODLY", c: "#ffffff", godly: true, q: "A SACRED CREATION OF ABSOLUTE POWER! ⚡👑🧀" }
+      { m: 10, n: "Common", c: "#8e8e93", q: "A simple culinary slice.", emojis: [] },
+      { m: 50, n: "Uncommon", c: "#34c759", q: "Freshly crafted with rich texture.", emojis: ['🧀'] },
+      { m: 250, n: "Rare", c: "#007aff", q: "Artisanal quality, perfectly aged.", emojis: ['🧀', '✨'] },
+      { m: 1500, n: "Epic", c: "#af52de", q: "Exceptional flavor with rare spices.", emojis: ['🧀', '✨', '💜'] },
+      { m: 10000, n: "Legendary", c: "#ff9500", q: "Masterwork wheel. Highly prized!", emojis: ['🧀', '✨', '🔥', '⭐'] },
+      { m: 100000, n: "Mythic", c: "#ff2d55", q: "Sought by grand connoisseurs worldwide.", emojis: ['🧀', '✨', '🔥', '💥'] },
+      { m: 1000000, n: "Exotic", c: "#5ac8fa", q: "Forged through ancient secrets.", emojis: ['🧀', '✨', '💎', '❄️'] },
+      { m: 10000000, n: "Divine", c: "#ffd700", q: "A sacred wheel of glowing gold!", emojis: ['🧀', '✨', '👑', '🌟'] },
+      { m: 100000000, n: "Celestial", c: "#00ffcc", q: "A mythical creation beyond mortals!", emojis: ['🧀', '✨', '⚡', '🌌'] },
+      { m: 1000000000, n: "Galactic", c: "#9d4edd", q: "Spanning entire solar systems of pure dairy.", emojis: ['🧀', '⚡', '🌌', '🪐'] },
+      { m: 10000000000, n: "Quantum", c: "#00f5d4", q: "Existing in every dimension simultaneously.", emojis: ['🧀', '⚡', '🌀', '🔮'] },
+      { m: 100000000000, n: "Glitch", c: "#ff007f", q: "Reality breaks in the presence of this slice! 👾", emojis: ['🧀', '👾', '💾', '⚠️'] },
+      { m: 1000000000000, n: "Sigma", c: "#ff00ff", q: "Pure unadulterated brainrot cheese energy 🗿🧀", emojis: ['🧀', '🗿', '🍷', '🔥'] },
+      { m: Infinity, n: "GODLY", c: "#ffffff", godly: true, q: "A SACRED CREATION OF ABSOLUTE POWER! ⚡👑🧀", emojis: ['🧀', '⚡', '👑', '🗿', '💎', '🔥'] }
     ];
 
     const P = [];
@@ -341,7 +342,7 @@
     }
 
     /* EXCLUSIVE GODLY TIER FOR #1099 & #1100 */
-    const godlyTier = { m: Infinity, n: "GODLY", c: "#ffffff", godly: true, q: "A SACRED CREATION OF ABSOLUTE POWER! ⚡👑🧀" };
+    const godlyTier = T[T.length - 1];
 
     P[P.length - 2] = {
       id: 1099,
@@ -390,7 +391,7 @@
     const flashEl = document.getElementById('c-screen-flash');
     let rolling = false;
 
-    /* ENHANCED MULTI-TIER PARTICLES & SHOCKWAVES */
+    /* DYNAMIC EXPLOSION BOOM PER RARITY TIER */
     function superBurst(win) {
       let cv = document.getElementById('c-canvas');
       if (!cv) return;
@@ -398,20 +399,21 @@
       cv.width = box.offsetWidth;
       cv.height = box.offsetHeight;
 
+      let tIdx = T.findIndex(t => t.n === win.tier.n);
+      if (tIdx < 0) tIdx = 0;
+
       let pts = [];
       let rings = [];
 
-      let count = 40;
-      let useEmojis = false;
-      let emojis = ['🧀', '✨'];
+      // Particle count scales strictly with rarity tier (12 up to 300+)
+      let particleCount = (tIdx + 1) * 22;
+      let emojiList = win.tier.emojis || [];
+      let useEmojis = emojiList.length > 0;
 
-      if (win.val >= 1500) count = 80;
-      if (win.val >= 100000) { count = 150; useEmojis = true; emojis = ['🧀', '✨', '⭐', '🔥']; }
-      if (win.val >= 1000000000 || win.tier.godly) { count = 250; useEmojis = true; emojis = ['🧀', '⚡', '👑', '🗿', '🔥', '✨', '💎']; }
-
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < particleCount; i++) {
         let ang = Math.random() * Math.PI * 2;
-        let spd = Math.random() * (win.val >= 100000 ? 18 : 10) + 4;
+        // Boom speed scales per tier!
+        let spd = Math.random() * (4 + tIdx * 1.2) + 2;
         let col = win.tier.godly ? ['#ffffff','#ffee00','#ff6600','#ff0044'][i%4] : win.tier.c;
 
         pts.push({
@@ -419,33 +421,38 @@
           y: cv.height / 2,
           vx: Math.cos(ang) * spd,
           vy: Math.sin(ang) * spd,
-          sz: Math.random() * 10 + 4,
+          sz: Math.random() * (3 + tIdx * 0.6) + 3,
           color: col,
           alpha: 1,
-          emoji: useEmojis ? emojis[Math.floor(Math.random() * emojis.length)] : null,
+          emoji: (useEmojis && Math.random() < 0.4) ? emojiList[Math.floor(Math.random() * emojiList.length)] : null,
           rot: Math.random() * 360,
-          vRot: (Math.random() - 0.5) * 12
+          vRot: (Math.random() - 0.5) * (10 + tIdx)
         });
       }
 
-      /* Shockwave Rings for Legendary+ */
-      if (win.val >= 10000) {
-        rings.push({ r: 5, maxR: cv.width * 0.75, color: win.tier.c, alpha: 1, lw: 8 });
-      }
-      if (win.val >= 1000000000 || win.tier.godly) {
-        rings.push({ r: 5, maxR: cv.width * 1.2, color: '#ffffff', alpha: 1, lw: 14 });
+      /* Shockwave Rings scale per Tier (1 ring for Uncommon/Rare, up to 4 rings for Godly) */
+      let numRings = Math.min(Math.floor(tIdx / 3), 4);
+      for (let r = 0; r < numRings; r++) {
+        rings.push({
+          r: 5,
+          maxR: cv.width * (0.3 + (r * 0.25) + (tIdx * 0.05)),
+          color: (r % 2 === 0) ? win.tier.c : '#ffffff',
+          alpha: 1,
+          lw: 4 + tIdx,
+          spd: 10 + (r * 4) + tIdx
+        });
       }
 
       function draw() {
         ctx.clearRect(0, 0, cv.width, cv.height);
         let active = false;
 
-        /* Shockwaves */
+        /* Draw Shockwave Boom Rings */
         rings.forEach(rg => {
           if (rg.alpha > 0) {
             active = true;
-            rg.r += 14;
-            rg.alpha -= 0.025;
+            rg.r += rg.spd;
+            rg.alpha -= 0.035;
             ctx.save();
             ctx.beginPath();
             ctx.arc(cv.width / 2, cv.height / 2, rg.r, 0, Math.PI * 2);
@@ -457,12 +464,12 @@
           }
         });
 
-        /* Particles */
+        /* Draw Boom Particles & Emojis */
         pts.forEach(p => {
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += 0.18; /* Gravity effect */
-          p.alpha -= (win.val >= 100000 ? 0.012 : 0.022);
+          p.vy += 0.15; // Gravity
+          p.alpha -= (0.015 + (13 - tIdx) * 0.002); // Higher tier particles stay longer!
           p.rot += p.vRot;
           if (p.alpha > 0) {
             active = true;
@@ -488,51 +495,50 @@
       draw();
     }
 
-    /* Dynamic Visual & Sound Effects Trigger */
+    /* SPECIFIC AUDIO & VISUAL BOOM FOR EVERY SINGLE RARITY TIER */
     function triggerTierFX(win) {
+      let tIdx = T.findIndex(t => t.n === win.tier.n);
+      if (tIdx < 0) tIdx = 0;
+
       superBurst(win);
 
-      /* Screen Shake & Flashes based on Cheese Quality */
       box.classList.remove('c-shake-sm', 'c-shake-lg');
 
-      if (win.tier.godly || win.val >= 1000000000) {
-        /* GODLY / SIGMA / GLITCH / QUANTUM (1B+) */
+      // 1. Screen Shake: Common/Uncommon = None, Rare-Epic = Small Shake, Legendary+ = Heavy Shake
+      if (tIdx >= 2 && tIdx <= 4) {
+        box.classList.add('c-shake-sm');
+      } else if (tIdx >= 5) {
         box.classList.add('c-shake-lg');
+      }
+
+      // 2. Full Screen Color Flash (Scales in brightness/opacity per tier)
+      if (tIdx >= 2) {
         flashEl.style.background = win.tier.c;
-        flashEl.style.opacity = '0.7';
-        setTimeout(() => flashEl.style.opacity = '0', 300);
+        flashEl.style.opacity = Math.min(0.2 + (tIdx * 0.05), 0.85).toString();
+        setTimeout(() => flashEl.style.opacity = '0', 150 + (tIdx * 20));
+      }
 
-        // Sub-Bass Boom + Fanfare
-        snd(100, 'sawtooth', 0.4, 0.4);
-        setTimeout(() => snd(523.25, 'square', 0.25), 80);
-        setTimeout(() => snd(659.25, 'square', 0.25), 160);
-        setTimeout(() => snd(783.99, 'square', 0.25), 240);
-        setTimeout(() => snd(1046.50, 'square', 0.35), 320);
-        setTimeout(() => snd(1567.98, 'square', 0.45, 0.6), 400);
+      // 3. SOUND BOOM GENERATOR (Unique Frequency Boom Blast for each Rarity!)
+      // Base frequency drops deeper, gain gets stronger, and sub-harmonics layer in!
+      let boomPitch = Math.max(60, 450 - (tIdx * 28)); // Lower frequency = deeper boom sound
+      let gainVal = Math.min(0.08 + (tIdx * 0.035), 0.5);
 
-      } else if (win.val >= 100000) {
-        /* MYTHIC / EXOTIC / DIVINE / CELESTIAL (100k - 100M) */
-        box.classList.add('c-shake-sm');
-        flashEl.style.background = win.tier.c;
-        flashEl.style.opacity = '0.4';
-        setTimeout(() => flashEl.style.opacity = '0', 200);
+      // Deep Sub-Bass Synth Blast
+      snd(boomPitch, 'sawtooth', gainVal, 0.2 + (tIdx * 0.03));
+      snd(boomPitch / 2, 'sine', gainVal * 0.8, 0.3 + (tIdx * 0.04));
 
-        // Synth Chime
-        snd(440, 'triangle', 0.2);
-        setTimeout(() => snd(554.37, 'triangle', 0.2), 100);
-        setTimeout(() => snd(659.25, 'triangle', 0.25), 200);
-        setTimeout(() => snd(880.00, 'triangle', 0.3), 300);
-
-      } else if (win.val >= 1500) {
-        /* EPIC / LEGENDARY (1.5k - 10k) */
-        box.classList.add('c-shake-sm');
-        snd(523.25, 'sine', 0.15);
-        setTimeout(() => snd(659.25, 'sine', 0.15), 100);
-        setTimeout(() => snd(783.99, 'sine', 0.2), 200);
-
-      } else {
-        /* COMMON / UNCOMMON / RARE (< 1.5k) */
-        snd(523.25, 'sine', 0.1);
+      // Multi-Note Victory Fanfare layers on top as Rarity increases!
+      if (tIdx >= 2) {
+        setTimeout(() => snd(boomPitch * 1.25, 'square', gainVal * 0.6, 0.15), 60);
+      }
+      if (tIdx >= 4) {
+        setTimeout(() => snd(boomPitch * 1.5, 'square', gainVal * 0.7, 0.2), 120);
+      }
+      if (tIdx >= 6) {
+        setTimeout(() => snd(boomPitch * 2.0, 'square', gainVal * 0.8, 0.25), 180);
+      }
+      if (tIdx >= 9) {
+        setTimeout(() => snd(boomPitch * 2.5, 'triangle', gainVal * 0.9, 0.35), 240);
       }
     }
 
@@ -828,7 +834,7 @@
           localStorage.setItem('c_rng_coins', coins);
           document.getElementById('c-coins-val').innerText = coins.toLocaleString();
 
-          /* Trigger Multi-tier Effects */
+          /* Trigger Rarity-Specific Explosion Boom */
           triggerTierFX(win);
 
           let badgeClass = win.tier.godly ? 'godly-badge' : '';
