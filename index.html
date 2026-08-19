@@ -1,3 +1,6 @@
+Added the new **GODLY** rarity tier exclusively for **EJ** and **CheeseGuy** with a glowing animated color cycle that shifts smoothly from **White ➔ Yellow ➔ Orange ➔ Red**! 🧀⚡👑
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,13 +63,23 @@
       0% { background: rgba(255, 255, 255, 0.7); }
       100% { background: transparent; }
     }
-    @keyframes rainbowGlow {
-      0% { box-shadow: 0 0 35px #ff0000; }
-      25% { box-shadow: 0 0 35px #ffff00; }
-      50% { box-shadow: 0 0 35px #00ff00; }
-      75% { box-shadow: 0 0 35px #0088ff; }
-      100% { box-shadow: 0 0 35px #ff00ff; }
+
+    /* GODLY Animated Color Cycle: White -> Yellow -> Orange -> Red */
+    @keyframes wyorColorShift {
+      0% { border-color: #ffffff; box-shadow: 0 0 35px #ffffff; color: #ffffff; }
+      33% { border-color: #ffee00; box-shadow: 0 0 35px #ffee00; color: #ffee00; }
+      66% { border-color: #ff6600; box-shadow: 0 0 35px #ff6600; color: #ff6600; }
+      100% { border-color: #ff0044; box-shadow: 0 0 35px #ff0044; color: #ff0044; }
     }
+    @keyframes wyorBadgeShift {
+      0% { background: #ffffff; color: #000; }
+      33% { background: #ffee00; color: #000; }
+      66% { background: #ff6600; color: #fff; }
+      100% { background: #ff0044; color: #fff; }
+    }
+
+    .godly-border { animation: wyorColorShift 1.2s infinite alternate ease-in-out !important; }
+    .godly-badge { animation: wyorBadgeShift 1.2s infinite alternate ease-in-out !important; }
 
     .c-rolling-card { animation: cPulse 0.4s infinite ease-in-out !important; }
     .c-land-fx { animation: cLand 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; }
@@ -79,22 +92,19 @@
     <canvas id="c-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
 
     <div style="position:relative;z-index:2;">
-      <!-- STANDALONE MAIN TITLE -->
+      <!-- MAIN TITLE -->
       <h1 style="font-size:32px;font-weight:900;letter-spacing:3px;color:#ffaa00;text-transform:uppercase;margin-bottom:20px;text-shadow:0 0 15px rgba(255,170,0,0.4);">
         🧀 CHEESE RNG 🎲
       </h1>
 
       <!-- STATS & COINS DASHBOARD PANEL -->
       <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:14px;margin-bottom:22px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;">
-        <!-- Coins -->
         <div style="font-size:16px;font-weight:900;color:#ffd700;background:rgba(255,215,0,0.12);padding:8px 18px;border-radius:14px;border:1px solid rgba(255,215,0,0.35);">
           🧀 <span id="c-coins-val">0</span> Coins
         </div>
-        <!-- Luck -->
         <div style="background:rgba(255,149,0,0.15);color:#ff9500;padding:8px 16px;border-radius:14px;border:1px solid rgba(255,149,0,0.35);font-size:14px;font-weight:800;">
           🍀 Luck: <span id="c-st-l">+0%</span>
         </div>
-        <!-- Speed -->
         <div style="background:rgba(90,200,250,0.15);color:#5ac8fa;padding:8px 16px;border-radius:14px;border:1px solid rgba(90,200,250,0.35);font-size:14px;font-weight:800;">
           ⚡ Speed: <span id="c-st-s">-0%</span>
         </div>
@@ -140,7 +150,7 @@
       <div id="c-idx-view" style="display:none;text-align:left;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
           <span style="font-weight:bold;font-size:18px;color:#ffaa00;">📖 CHEESE COLLECTION</span>
-          <span style="font-size:15px;color:#aaa;font-weight:bold;"><span id="c-idx-cnt">0</span>/600</span>
+          <span style="font-size:15px;color:#aaa;font-weight:bold;"><span id="c-idx-cnt">0</span>/1100</span>
         </div>
         <div id="c-idx-list" style="max-height:300px;overflow-y:auto;background:#14141c;border:1px solid #2a2a38;border-radius:18px;padding:12px;margin-bottom:14px;"></div>
         <button id="c-idx-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:16px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:16px;">← BACK TO ROLLING</button>
@@ -172,6 +182,7 @@
     }
 
     const B = ["Cheddar","Gouda","Brie","Swiss","Camembert","Parmesan","Mozzarella","Provolone","Gruyère","Manchego","Blue Cheese","Feta","Havarti","Gorgonzola","Asiago","Ricotta","Fontina","Taleggio","Edam","Cotija","Emmental","Raclette","Roquefort","Pecorino","Monterey Jack","Colby","Stilton","Burrata","Münster","Halloumi","Mascarpone","Reblochon","Beaufort","Appenzeller","Mimolette","Oaxaca","Kasseri","Wensleydale","Red Leicester","Jarlsberg","Derby","Caerphilly","Mahón","Pont-l'Évêque","Époisses","Morbier","Tomme","Vacherin","Scamorza","Telepan","Abertam","Bresse Bleu","Cabrales","Danablu","Gjetost","Leyden","Majorero","Nokkelost","Roncal","Tilsit"];
+    
     const T = [
       { m: 10, n: "Common", c: "#8e8e93", q: "A simple culinary slice." },
       { m: 50, n: "Uncommon", c: "#34c759", q: "Freshly crafted with rich texture." },
@@ -181,16 +192,27 @@
       { m: 100000, n: "Mythic", c: "#ff2d55", q: "Sought by grand connoisseurs worldwide." },
       { m: 1000000, n: "Exotic", c: "#5ac8fa", q: "Forged through ancient secrets." },
       { m: 10000000, n: "Divine", c: "#ffd700", q: "A sacred wheel of glowing gold!" },
-      { m: Infinity, n: "Celestial", c: "#ffffff", q: "A mythical creation beyond mortals!" }
+      { m: 100000000, n: "Celestial", c: "#00ffcc", q: "A mythical creation beyond mortals!" },
+      { m: 1000000000, n: "Galactic", c: "#9d4edd", q: "Spanning entire solar systems of pure dairy." },
+      { m: 10000000000, n: "Quantum", c: "#00f5d4", q: "Existing in every dimension simultaneously." },
+      { m: 100000000000, n: "Glitch", c: "#ff007f", q: "Reality breaks in the presence of this slice! 👾" },
+      { m: 1000000000000, n: "Sigma", c: "#ff00ff", q: "Pure unadulterated brainrot cheese energy 🗿🧀" },
+      { m: Infinity, n: "GODLY", c: "#ffffff", godly: true, q: "A SACRED CREATION OF ABSOLUTE POWER! ⚡👑🧀" }
     ];
 
     const P = [];
-    for (let i = 1; i <= 600; i++) {
+    /* Generate 1100 Cheeses */
+    for (let i = 1; i <= 1100; i++) {
       let val = Math.floor(2 * Math.pow(1.0275, i - 1));
       let tier = T.find(t => val < t.m) || T[T.length - 1];
       let bName = B[(i - 1) % B.length];
       let prefix = "";
-      if (val >= 10000000) prefix = "COSMIC ETERNAL ";
+
+      if (val >= 100000000000) prefix = "SIGMA OMEGA ";
+      else if (val >= 10000000000) prefix = "GLITCH MATRIX ";
+      else if (val >= 1000000000) prefix = "QUANTUM CORE ";
+      else if (val >= 100000000) prefix = "GALACTIC NEBULA ";
+      else if (val >= 10000000) prefix = "COSMIC ETERNAL ";
       else if (val >= 1000000) prefix = "SANCTUM SUN ";
       else if (val >= 100000) prefix = "STARLIGHT ";
       else if (val >= 10000) prefix = "GRAND RESERVE ";
@@ -202,6 +224,29 @@
 
       P.push({ id: i, n: prefix + bName, val: val, strVal: "1/" + val.toLocaleString(), tier: tier, w: 1 / val });
     }
+
+    /* EXCLUSIVE GODLY TIER FOR #1099 & #1100 */
+    const godlyTier = { m: Infinity, n: "GODLY", c: "#ffffff", godly: true, q: "A SACRED CREATION OF ABSOLUTE POWER! ⚡👑🧀" };
+
+    // #1099: 2nd Rarest = EJ (1 in 2.5 Trillion)
+    P[P.length - 2] = {
+      id: 1099,
+      n: "⚡ EJ ⚡",
+      val: 2500000000000,
+      strVal: "1/2,500,000,000,000",
+      tier: godlyTier,
+      w: 1 / 2500000000000
+    };
+
+    // #1100: 1st Rarest = CheeseGuy (1 in 5 Trillion)
+    P[P.length - 1] = {
+      id: 1100,
+      n: "👑 CHEESEGUY 🧀",
+      val: 5000000000000,
+      strVal: "1/5,000,000,000,000",
+      tier: godlyTier,
+      w: 1 / 5000000000000
+    };
 
     function rollItem() {
       let luckMult = 1 + (luckLvl * 0.20);
@@ -223,17 +268,18 @@
     const iView = document.getElementById('c-idx-view');
     let rolling = false;
 
-    function burst(color) {
+    function burst(colorArray) {
       let cv = document.getElementById('c-canvas');
       if (!cv) return;
       let ctx = cv.getContext('2d');
       cv.width = box.offsetWidth;
       cv.height = box.offsetHeight;
       let pts = [];
-      for (let i = 0; i < 60; i++) {
+      for (let i = 0; i < 75; i++) {
         let ang = Math.random() * Math.PI * 2;
-        let spd = Math.random() * 10 + 3;
-        pts.push({ x: cv.width / 2, y: cv.height / 2, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, sz: Math.random() * 7 + 3, color: color, alpha: 1 });
+        let spd = Math.random() * 12 + 4;
+        let chosenColor = Array.isArray(colorArray) ? colorArray[Math.floor(Math.random() * colorArray.length)] : colorArray;
+        pts.push({ x: cv.width / 2, y: cv.height / 2, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, sz: Math.random() * 8 + 3, color: chosenColor, alpha: 1 });
       }
       function draw() {
         ctx.clearRect(0, 0, cv.width, cv.height);
@@ -289,7 +335,8 @@
         let item = P[i];
         let isFound = unlocked.includes(item.id);
         if (isFound) {
-          h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;margin-bottom:6px;background:#1c1c28;border-left:5px solid ' + item.tier.c + ';border-radius:10px;font-size:14px;"><div style="font-weight:bold;color:#fff;">#' + item.id + ' ' + item.n + '</div><div style="color:' + item.tier.c + ';font-weight:800;font-size:13px;">' + item.strVal + '</div></div>';
+          let godlyClass = item.tier.godly ? 'godly-border' : '';
+          h += '<div class="' + godlyClass + '" style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;margin-bottom:6px;background:#1c1c28;border-left:5px solid ' + item.tier.c + ';border-radius:10px;font-size:14px;"><div style="font-weight:bold;color:#fff;">#' + item.id + ' ' + item.n + '</div><div style="color:' + (item.tier.godly ? '#ffee00' : item.tier.c) + ';font-weight:800;font-size:13px;">' + item.strVal + '</div></div>';
         } else {
           h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;margin-bottom:6px;background:#181820;border-left:5px solid #333;border-radius:10px;font-size:14px;opacity:0.4;"><div style="font-weight:bold;color:#777;">#' + item.id + ' ???</div><div style="color:#555;font-size:13px;">Locked</div></div>';
         }
@@ -357,7 +404,7 @@
       if (rolling) return;
       rolling = true;
       btn.style.opacity = '0.5';
-      card.classList.remove('c-land-fx');
+      card.classList.remove('c-land-fx', 'godly-border');
       card.classList.add('c-rolling-card');
       let step = 0;
       let totalSteps = Math.round(Math.max(14, 24 - spdLvl * 1.5));
@@ -367,8 +414,15 @@
         step++;
         let isFinal = (step >= totalSteps);
         let currentItem = isFinal ? win : P[Math.floor(Math.random() * P.length)];
-        card.style.borderColor = currentItem.tier.c;
-        card.style.boxShadow = '0 0 30px ' + currentItem.tier.c + '88';
+        
+        if (currentItem.tier.godly) {
+          card.classList.add('godly-border');
+        } else {
+          card.classList.remove('godly-border');
+          card.style.borderColor = currentItem.tier.c;
+          card.style.boxShadow = '0 0 30px ' + currentItem.tier.c + '88';
+        }
+
         card.innerHTML = '<div style="font-size:15px;font-weight:800;color:#ffaa00;letter-spacing:2px;margin-bottom:8px;">' + (isFinal ? 'DECIDING...' : 'ROLLING...') + '</div><div style="font-size:28px;font-weight:900;color:' + currentItem.tier.c + ';text-align:center;line-height:1.2;margin:6px 0;">' + currentItem.n + '</div><div style="font-size:14px;font-weight:700;color:#888;margin-top:6px;">' + currentItem.strVal + '</div>';
 
         let progress = step / totalSteps;
@@ -399,27 +453,33 @@
           localStorage.setItem('c_rng_coins', coins);
           document.getElementById('c-coins-val').innerText = coins.toLocaleString();
 
-          if (win.val >= 100000) {
+          if (win.tier.godly) {
+            snd(880, 'square', 0.25);
+            setTimeout(() => snd(1174.66, 'square', 0.25), 100);
+            setTimeout(() => snd(1567.98, 'square', 0.3), 200);
+            setTimeout(() => snd(2093.00, 'square', 0.35), 300);
+            burst(['#ffffff', '#ffee00', '#ff6600', '#ff0044']);
+          } else if (win.val >= 100000) {
             snd(880, 'triangle', 0.2);
             setTimeout(() => snd(1174.66, 'triangle', 0.2), 120);
             setTimeout(() => snd(1396.91, 'triangle', 0.25), 240);
-          } else if (win.val >= 1000) {
-            snd(587.33, 'sine', 0.15);
-            setTimeout(() => snd(880, 'sine', 0.2), 150);
+            burst(win.tier.c);
           } else {
             snd(523.25, 'sine', 0.1);
+            burst(win.tier.c);
           }
 
-          burst(win.tier.c);
-          card.style.borderColor = win.tier.c;
-          card.style.boxShadow = '0 0 40px ' + win.tier.c + 'aa';
-          card.innerHTML = '<div style="font-size:13px;color:#888;font-weight:700;margin-bottom:4px;">#' + win.id + ' / 600</div><div style="font-size:28px;font-weight:900;color:#fff;text-align:center;line-height:1.2;margin:6px 0;text-shadow:0 0 12px ' + win.tier.c + 'aa;">' + win.n + '</div><div style="display:inline-block;padding:6px 18px;border-radius:20px;background:' + win.tier.c + ';color:#000;font-weight:900;font-size:13px;letter-spacing:1px;margin:6px 0;">' + win.tier.n.toUpperCase() + ' (' + win.strVal + ')</div><div style="font-size:16px;font-weight:900;color:#ffd700;margin:4px 0;">+🧀 ' + reward.toLocaleString() + ' Coins</div><div style="font-size:13px;color:#ddd;font-style:italic;text-align:center;line-height:1.3;max-width:400px;margin-top:4px;">"' + win.tier.q + '"</div>';
+          let badgeClass = win.tier.godly ? 'godly-badge' : '';
+          let badgeStyle = win.tier.godly ? '' : 'background:' + win.tier.c + ';color:#000;';
 
-          if (win.val >= 10000000) {
-            box.style.animation = "rainbowGlow 2s infinite alternate";
+          if (win.tier.godly) {
+            card.classList.add('godly-border');
           } else {
-            box.style.animation = "cPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+            card.style.borderColor = win.tier.c;
+            card.style.boxShadow = '0 0 40px ' + win.tier.c + 'aa';
           }
+
+          card.innerHTML = '<div style="font-size:13px;color:#888;font-weight:700;margin-bottom:4px;">#' + win.id + ' / 1100</div><div style="font-size:28px;font-weight:900;color:#fff;text-align:center;line-height:1.2;margin:6px 0;">' + win.n + '</div><div class="' + badgeClass + '" style="display:inline-block;padding:6px 18px;border-radius:20px;' + badgeStyle + 'font-weight:900;font-size:13px;letter-spacing:1px;margin:6px 0;">' + win.tier.n + ' (' + win.strVal + ')</div><div style="font-size:16px;font-weight:900;color:#ffd700;margin:4px 0;">+🧀 ' + reward.toLocaleString() + ' Coins</div><div style="font-size:13px;color:#ddd;font-style:italic;text-align:center;line-height:1.3;max-width:400px;margin-top:4px;">"' + win.tier.q + '"</div>';
 
           btn.style.opacity = '1';
           btn.innerText = '🎲 ROLL AGAIN';
@@ -433,3 +493,5 @@
   </script>
 </body>
 </html>
+
+```
