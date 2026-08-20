@@ -190,7 +190,7 @@
         <div style="background:#181820;border:1px solid #333;border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
           <div>
             <div style="font-weight:bold;color:#34c759;font-size:18px;">💰 Coin Multi (Lvl <span id="c-cm-lvl">0</span>)</div>
-            <div style="font-size:13px;color:#888;">+25% Cheese Earnings per Lvl</div>
+            <div style="font-size:13px;color:#888;">+10% Cheese Earnings per Lvl</div>
           </div>
           <button id="c-buy-cm" style="background:#ffd700;color:#000;border:none;border-radius:12px;padding:12px 18px;font-weight:900;font-size:15px;cursor:pointer;">🧀 <span id="c-cm-cost">50</span></button>
         </div>
@@ -753,7 +753,7 @@
       
       document.getElementById('c-coins-val').innerText = coins.toLocaleString();
       if (document.getElementById('c-st-l')) document.getElementById('c-st-l').innerText = '+' + (luckLvl * 20) + '%';
-      if (document.getElementById('c-st-cm')) document.getElementById('c-st-cm').innerText = (1 + cmLvl * 0.25).toFixed(2) + 'x';
+      if (document.getElementById('c-st-cm')) document.getElementById('c-st-cm').innerText = (1 + cmLvl * 0.10).toFixed(2) + 'x';
       if (document.getElementById('c-st-s')) document.getElementById('c-st-s').innerText = spdMult.toFixed(1) + 'x';
     }
 
@@ -869,7 +869,7 @@
 
           /* REWARD CALCULATION WITH COIN MULTI */
           let baseReward = Math.max(1, Math.floor(win.val / 2));
-          let coinMultiplier = 1 + (cmLvl * 0.25);
+          let coinMultiplier = 1 + (cmLvl * 0.10);
           let reward = Math.floor(baseReward * coinMultiplier);
 
           coins += reward;
