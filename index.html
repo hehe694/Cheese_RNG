@@ -144,14 +144,17 @@
       </h1>
 
       <!-- STATS & COINS DASHBOARD PANEL -->
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:14px;margin-bottom:22px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;">
-        <div style="font-size:16px;font-weight:900;color:#ffd700;background:rgba(255,215,0,0.12);padding:8px 18px;border-radius:14px;border:1px solid rgba(255,215,0,0.35);">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:14px;margin-bottom:22px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;">
+        <div style="font-size:15px;font-weight:900;color:#ffd700;background:rgba(255,215,0,0.12);padding:8px 14px;border-radius:14px;border:1px solid rgba(255,215,0,0.35);">
           🧀 <span id="c-coins-val">0</span> Coins
         </div>
-        <div style="background:rgba(255,149,0,0.15);color:#ff9500;padding:8px 16px;border-radius:14px;border:1px solid rgba(255,149,0,0.35);font-size:14px;font-weight:800;">
+        <div style="background:rgba(255,149,0,0.15);color:#ff9500;padding:8px 12px;border-radius:14px;border:1px solid rgba(255,149,0,0.35);font-size:13px;font-weight:800;">
           🍀 Luck: <span id="c-st-l">+0%</span>
         </div>
-        <div style="background:rgba(90,200,250,0.15);color:#5ac8fa;padding:8px 16px;border-radius:14px;border:1px solid rgba(90,200,250,0.35);font-size:14px;font-weight:800;">
+        <div style="background:rgba(52,199,89,0.15);color:#34c759;padding:8px 12px;border-radius:14px;border:1px solid rgba(52,199,89,0.35);font-size:13px;font-weight:800;">
+          💰 Multi: <span id="c-st-cm">1.0x</span>
+        </div>
+        <div style="background:rgba(90,200,250,0.15);color:#5ac8fa;padding:8px 12px;border-radius:14px;border:1px solid rgba(90,200,250,0.35);font-size:13px;font-weight:800;">
           ⚡ Speed: <span id="c-st-s">1.0x</span>
         </div>
       </div>
@@ -174,6 +177,7 @@
 
       <!-- SHOP VIEW -->
       <div id="c-shop-view" style="display:none;text-align:left;">
+        <!-- LUCK UPGRADE -->
         <div style="background:#181820;border:1px solid #333;border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
           <div>
             <div style="font-weight:bold;color:#ff9500;font-size:18px;">🍀 Luck Boost (Lvl <span id="c-l-lvl">0</span>)</div>
@@ -181,6 +185,17 @@
           </div>
           <button id="c-buy-l" style="background:#ffd700;color:#000;border:none;border-radius:12px;padding:12px 18px;font-weight:900;font-size:15px;cursor:pointer;">🧀 <span id="c-l-cost">50</span></button>
         </div>
+
+        <!-- COIN MULTI UPGRADE -->
+        <div style="background:#181820;border:1px solid #333;border-radius:18px;padding:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-weight:bold;color:#34c759;font-size:18px;">💰 Coin Multi (Lvl <span id="c-cm-lvl">0</span>)</div>
+            <div style="font-size:13px;color:#888;">+25% Cheese Earnings per Lvl</div>
+          </div>
+          <button id="c-buy-cm" style="background:#ffd700;color:#000;border:none;border-radius:12px;padding:12px 18px;font-weight:900;font-size:15px;cursor:pointer;">🧀 <span id="c-cm-cost">50</span></button>
+        </div>
+
+        <!-- SPEED UPGRADE -->
         <div style="background:#181820;border:1px solid #333;border-radius:18px;padding:16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;">
           <div>
             <div style="font-weight:bold;color:#5ac8fa;font-size:18px;">⚡ Speed Multiplier (<span id="c-s-mult">1.0</span>x)</div>
@@ -188,6 +203,7 @@
           </div>
           <button id="c-buy-s" style="background:#ffd700;color:#000;border:none;border-radius:12px;padding:12px 18px;font-weight:900;font-size:15px;cursor:pointer;">🧀 <span id="c-s-cost">40</span></button>
         </div>
+
         <button id="c-back-btn" style="width:100%;background:#282835;color:#fff;border:none;padding:16px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:16px;margin-bottom:12px;">← BACK TO ROLLING</button>
         <button id="c-wipe-btn" style="width:100%;background:rgba(255,59,48,0.2);color:#ff3b30;border:1px solid rgba(255,59,48,0.5);padding:14px;border-radius:16px;font-weight:bold;cursor:pointer;font-size:14px;">💥 WIPE DATA</button>
       </div>
@@ -216,15 +232,19 @@
           </div>
         </div>
 
-        <!-- STATS / SPEED MULTIPLIER -->
+        <!-- STATS / LUCK & SPEED & MULTI -->
         <div style="background:#181820;border:1px solid #333;border-radius:16px;padding:14px;margin-bottom:12px;">
-          <div style="font-weight:bold;color:#ff9500;margin-bottom:6px;">🍀 LUCK LEVEL & ⚡ ACTUAL SPEED MULTIPLIER</div>
+          <div style="font-weight:bold;color:#ff9500;margin-bottom:6px;">🍀 LUCK, 💰 COIN MULTI & ⚡ SPEED</div>
           <div style="display:flex;gap:8px;margin-bottom:6px;">
-            <input type="number" id="adm-luck-input" class="admin-input" placeholder="Luck Level" style="margin:0;">
+            <input type="number" id="adm-luck-input" class="admin-input" placeholder="Luck Lvl" style="margin:0;">
             <button id="adm-set-luck" class="admin-btn" style="width:100px;">Set Luck</button>
           </div>
+          <div style="display:flex;gap:8px;margin-bottom:6px;">
+            <input type="number" id="adm-cm-input" class="admin-input" placeholder="Coin Multi Lvl" style="margin:0;">
+            <button id="adm-set-cm" class="admin-btn" style="width:100px;background:#34c759;color:#fff;">Set Multi</button>
+          </div>
           <div style="display:flex;gap:8px;">
-            <input type="number" id="adm-spd-input" class="admin-input" placeholder="Exact Speed Multiplier (e.g. 2 = 2x, 10 = 10x, 50 = Instant)" style="margin:0;" step="0.1">
+            <input type="number" id="adm-spd-input" class="admin-input" placeholder="Exact Speed Multi" style="margin:0;" step="0.1">
             <button id="adm-set-spd" class="admin-btn" style="width:100px;background:#5ac8fa;color:#000;">Set Speed</button>
           </div>
         </div>
@@ -273,6 +293,7 @@
   <script>
     let coins = parseInt(localStorage.getItem('c_rng_coins') || '0') || 0;
     let luckLvl = parseInt(localStorage.getItem('c_rng_luck') || '0') || 0;
+    let cmLvl = parseInt(localStorage.getItem('c_rng_cm_lvl') || '0') || 0;
     let spdLvl = parseInt(localStorage.getItem('c_rng_spd_lvl') || '0') || 0;
     let spdMult = parseFloat(localStorage.getItem('c_rng_spd_mult') || (1 + spdLvl * 0.1).toFixed(2)) || 1;
     let unlocked = [];
@@ -299,7 +320,6 @@
 
     const B = ["Cheddar","Gouda","Brie","Swiss","Camembert","Parmesan","Mozzarella","Provolone","Gruyère","Manchego","Blue Cheese","Feta","Havarti","Gorgonzola","Asiago","Ricotta","Fontina","Taleggio","Edam","Cotija","Emmental","Raclette","Roquefort","Pecorino","Monterey Jack","Colby","Stilton","Burrata","Münster","Halloumi","Mascarpone","Reblochon","Beaufort","Appenzeller","Mimolette","Oaxaca","Kasseri","Wensleydale","Red Leicester","Jarlsberg","Derby","Caerphilly","Mahón","Pont-l'Évêque","Époisses","Morbier","Tomme","Vacherin","Scamorza","Telepan","Abertam","Bresse Bleu","Cabrales","Danablu","Gjetost","Leyden","Majorero","Nokkelost","Roncal","Tilsit"];
     
-    // 14 DISTINCT RARITY TIERS WITH TIER INDEX 0 to 13
     const T = [
       { m: 10, n: "Common", c: "#8e8e93", q: "A simple culinary slice.", emojis: [] },
       { m: 50, n: "Uncommon", c: "#34c759", q: "Freshly crafted with rich texture.", emojis: ['🧀'] },
@@ -318,7 +338,6 @@
     ];
 
     const P = [];
-    /* Generate 1100 Cheeses */
     for (let i = 1; i <= 1100; i++) {
       let val = Math.floor(2 * Math.pow(1.0275, i - 1));
       let tier = T.find(t => val < t.m) || T[T.length - 1];
@@ -342,7 +361,6 @@
       P.push({ id: i, n: prefix + bName, val: val, strVal: "1/" + val.toLocaleString(), tier: tier, w: 1 / val });
     }
 
-    /* EXCLUSIVE GODLY TIER FOR #1099 & #1100 */
     const godlyTier = T[T.length - 1];
 
     P[P.length - 2] = {
@@ -392,7 +410,6 @@
     const flashEl = document.getElementById('c-screen-flash');
     let rolling = false;
 
-    /* DYNAMIC EXPLOSION BOOM PER RARITY TIER */
     function superBurst(win) {
       let cv = document.getElementById('c-canvas');
       if (!cv) return;
@@ -491,7 +508,6 @@
       draw();
     }
 
-    /* SPECIFIC AUDIO & VISUAL BOOM FOR EVERY SINGLE RARITY TIER */
     function triggerTierFX(win) {
       let tIdx = T.findIndex(t => t.n === win.tier.n);
       if (tIdx < 0) tIdx = 0;
@@ -592,12 +608,13 @@
       }
     });
 
+    /* TITLE CLICK PASSPHRASE LOGIC */
     document.getElementById('c-title').onclick = () => {
-      let code = prompt("Enter Admin Passcode (Case Sensitive):");
-      if (code && code === 'CHEEZE') {
+      let code = prompt("Enter Admin Passcode:");
+      if (code === 'CHEEZE') {
         openAdmin();
       } else if (code !== null) {
-        alert("Wrong code! ❌ (Remember: Must be ALL CAPS CHEEZE)");
+        alert("incorrect");
       }
     };
 
@@ -628,6 +645,14 @@
       localStorage.setItem('c_rng_luck', luckLvl);
       updateShop();
       alert('Luck set to Level ' + luckLvl + '! 🍀');
+    };
+
+    document.getElementById('adm-set-cm').onclick = () => {
+      let val = parseInt(document.getElementById('adm-cm-input').value || '0');
+      cmLvl = Math.max(0, val);
+      localStorage.setItem('c_rng_cm_lvl', cmLvl);
+      updateShop();
+      alert('Coin Multi set to Level ' + cmLvl + '! 💰');
     };
 
     document.getElementById('adm-set-spd').onclick = () => {
@@ -712,21 +737,28 @@
       document.getElementById('c-idx-list').innerHTML = h;
     }
 
-    /* REBALANCED SPEED UPGRADES: GIVES +0.1x ROLL SPEED PER LEVEL (+10%) */
     function updateShop() {
-      let lCost = Math.floor(50 * Math.pow(1.5, luckLvl));
-      let sCost = Math.floor(40 * Math.pow(1.35, spdLvl));
+      let lCost = Math.floor(50 * Math.pow(1.65, luckLvl));
+      let cmCost = Math.floor(50 * Math.pow(1.75, cmLvl));
+      let sCost = Math.floor(40 * Math.pow(1.48, spdLvl));
+      
       document.getElementById('c-l-lvl').innerText = luckLvl;
       document.getElementById('c-l-cost').innerText = lCost.toLocaleString();
+      
+      document.getElementById('c-cm-lvl').innerText = cmLvl;
+      document.getElementById('c-cm-cost').innerText = cmCost.toLocaleString();
+
       document.getElementById('c-s-mult').innerText = spdMult.toFixed(1);
       document.getElementById('c-s-cost').innerText = sCost.toLocaleString();
+      
       document.getElementById('c-coins-val').innerText = coins.toLocaleString();
       if (document.getElementById('c-st-l')) document.getElementById('c-st-l').innerText = '+' + (luckLvl * 20) + '%';
+      if (document.getElementById('c-st-cm')) document.getElementById('c-st-cm').innerText = (1 + cmLvl * 0.25).toFixed(2) + 'x';
       if (document.getElementById('c-st-s')) document.getElementById('c-st-s').innerText = spdMult.toFixed(1) + 'x';
     }
 
     document.getElementById('c-buy-l').onclick = () => {
-      let lCost = Math.floor(50 * Math.pow(1.5, luckLvl));
+      let lCost = Math.floor(50 * Math.pow(1.65, luckLvl));
       if (coins >= lCost) {
         coins -= lCost;
         luckLvl++;
@@ -739,9 +771,22 @@
       }
     };
 
-    /* Buy Speed - Gives +0.1x per level (Nerfed down from +0.5x) */
+    document.getElementById('c-buy-cm').onclick = () => {
+      let cmCost = Math.floor(50 * Math.pow(1.75, cmLvl));
+      if (coins >= cmCost) {
+        coins -= cmCost;
+        cmLvl++;
+        localStorage.setItem('c_rng_coins', coins);
+        localStorage.setItem('c_rng_cm_lvl', cmLvl);
+        snd(880, 'sine', 0.15);
+        updateShop();
+      } else {
+        snd(150, 'sawtooth', 0.1);
+      }
+    };
+
     document.getElementById('c-buy-s').onclick = () => {
-      let sCost = Math.floor(40 * Math.pow(1.35, spdLvl));
+      let sCost = Math.floor(40 * Math.pow(1.48, spdLvl));
       if (coins >= sCost) {
         coins -= sCost;
         spdLvl++;
@@ -760,11 +805,13 @@
       if (confirm('Are you sure you want to wipe all cheese progress? 🧀💥')) {
         localStorage.removeItem('c_rng_coins');
         localStorage.removeItem('c_rng_luck');
+        localStorage.removeItem('c_rng_cm_lvl');
         localStorage.removeItem('c_rng_spd_lvl');
         localStorage.removeItem('c_rng_spd_mult');
         localStorage.removeItem('c_rng_unlocked');
         coins = 0;
         luckLvl = 0;
+        cmLvl = 0;
         spdLvl = 0;
         spdMult = 1;
         unlocked = [];
@@ -820,7 +867,11 @@
           card.classList.remove('c-rolling-card');
           card.classList.add('c-land-fx');
 
-          let reward = Math.max(1, Math.floor(win.val / 2));
+          /* REWARD CALCULATION WITH COIN MULTI */
+          let baseReward = Math.max(1, Math.floor(win.val / 2));
+          let coinMultiplier = 1 + (cmLvl * 0.25);
+          let reward = Math.floor(baseReward * coinMultiplier);
+
           coins += reward;
           localStorage.setItem('c_rng_coins', coins);
           document.getElementById('c-coins-val').innerText = coins.toLocaleString();
